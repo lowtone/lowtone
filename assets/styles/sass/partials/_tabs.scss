@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+.nav-tab-hidden {
+	display: none;
+
+	&.nav-tab-active {
+		display: inline-block;
+	}
+}
+
+.nav-tab-title {
+	display: inline-block;
+	line-height: 24px;
+	padding: {
+		top: 4px;
+		bottom: 6px;
+	}
+	margin-right: 16px;
+}

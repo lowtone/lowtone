@@ -1,0 +1,112 @@
+@charset "UTF-8";
+
+$background: #fcfbf5 !default;
+
+@mixin box_sizing($box_sizing: content-box) {
+	box-sizing: $box_sizing;
+	-moz-box-sizing: $box_sizing;
+	-webkit-box-sizing: $box_sizing;
+}
+
+@mixin border_radius($radius) {
+	border-radius: $radius;
+	-moz-border-radius: $radius;
+	-webkit-border-radius: $radius;
+}
+
+@mixin box_shadow($left: 0, $top: 0, $blur: 0, $color: transparent, $inset: "", $important: "") {
+	-webkit-box-shadow: $left $top $blur $color #{$inset} #{$important};
+	-moz-box-shadow: $left $top $blur $color #{$inset} #{$important};
+	box-shadow: $left $top $blur $color #{$inset} #{$important};
+}
+
+@mixin linear_gradient($from, $to, $important: "") {
+	background-color: $from #{$important};
+	
+	background-image: -ms-linear-gradient(top, $from 0%, $to 100%) #{$important}; // IE10 Consumer Preview
+	background-image: -moz-linear-gradient(top, $from 0%, $to 100%) #{$important}; // Mozilla Firefox
+	background-image: -o-linear-gradient(top, $from 0%, $to 100%) #{$important}; // Opera
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, $from), color-stop(1, $to)) #{$important}; // Webkit (Safari/Chrome 10)
+	background-image: -webkit-linear-gradient(top, $from 0%, $to 100%) #{$important}; // Webkit (Chrome 11+)
+	background-image: linear-gradient(to bottom, $from 0%, $to 100%) #{$important}; // W3C Markup, IE10 Release Preview
+}
+
+@mixin font_size($scale: 1) {
+	
+}
+
+/**
+ * @param size $size The scale of the stripe pattern.
+ * @param color $color The color for the stripe.
+ * @param degrees $angle The angle of the stripes (doesn't work on older webkit 
+ * browsers).
+ */
+@mixin background_stripe($size: 3em, $color: rgba(255, 255, 255, .2), $angle: -45deg) {
+	-webkit-background-size: $size $size;
+	-moz-background-size: $size $size;
+	background-size: $size $size;
+
+	background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, $color), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, $color), color-stop(.75, $color), color-stop(.75, transparent), to(transparent));
+	background-image: -webkit-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+	background-image: -moz-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+	background-image: -ms-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+	background-image: -o-linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+	background-image: linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+}
+
+@mixin grayscale($grayscale: 1) {
+	@if 0 == $grayscale {
+		filter: none;
+		-webkit-filter: grayscale(0);
+	} @else {
+		filter: grayscale($grayscale*100%); /* Current draft standard */
+		-webkit-filter: grayscale($grayscale*100%); /* New WebKit */
+		-moz-filter: grayscale($grayscale*100%);
+		-ms-filter: grayscale($grayscale*100%); 
+		-o-filter: grayscale($grayscale*100%); /* Not yet supported in Gecko, Opera or IE */ 
+		filter: url(filters.svg#grayscale); /* Gecko */
+		filter: gray; /* IE */
+		-webkit-filter: grayscale(1); /* Old WebKit */
+	}
+}
+
+@mixin wp_menu_image($image, $type: "filter") {
+	.wp-menu-image {
+		background: {
+			image: $image;
+		}
+	}
+
+	@if "sprite" == $type {
+
+		.wp-menu-image {
+			background-position: 0 100% !important;
+			size: 100% auto;
+		}
+
+		&:hover,
+			&.current,
+			&.wp-has-current-submenu {
+				.wp-menu-image {
+					background-position: 0 0 !important;
+				}
+			}
+
+	} @else {
+
+		.wp-menu-image {
+			@include grayscale;
+			position: 6px 7px !important;
+			size: 16px auto;
+		}
+
+		&:hover,
+			&.current,
+			&.wp-has-current-submenu {
+				.wp-menu-image {
+					@include grayscale(0);
+				}
+			}
+
+	}
+}

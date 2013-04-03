@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+$background: #fff !default;
+
+/* Horizontal ruler */
+
+@mixin horizontal_ruler($foreground: #dfdfdf, $background: #f5f5f5) {
+
+	clear: both;
+	font-family: Georgia, serif;
+	height: 0;
+	margin: 2em 0;
+	padding: 0;
+	text-align: center;
+	
+	&:after {
+		content: "§";
+		display: inline-block;
+		font-size: 1.5em;
+		padding: 0 0.25em;
+		position: relative;
+		line-height: 1em;
+		top: -0.5em;
+	}
+
+	@include horizontal_ruler_border;
+	@include horizontal_ruler_color($foreground, $background);
+
+}
+
+@mixin horizontal_ruler_border() {
+	border: {
+		width: 0;
+		style: solid;
+		top: {
+			width: 1px;
+		}
+		bottom: {
+			width: 1px;
+		}
+	}
+}
+
+@mixin horizontal_ruler_color($foreground, $background, $important: '') {
+	@include horizontal_ruler_border_color($background, $important);
+	color: $foreground #{$important};
+	text-shadow: 0 1px lighten($foreground, 10%);
+	
+	&:after {
+		background: $background #{$important};
+	}
+}
+
+@mixin horizontal_ruler_border_color($color, $important: '') {
+	border: {
+		top-color: darken($color, 10%) #{$important};
+		bottom-color: lighten($color, 10%) #{$important};
+	}
+}
+
+hr.lowtone {
+	@include horizontal_ruler;
+}
+
+.inner-sidebar hr.lowtone {
+	margin: 1em 0;
+}
+
+// Line
+
+@mixin line($background: $background, $foreground: #333) {
+	text-align: center;
+	position: relative;
+	color: $foreground;
+	font: {
+		style: italic;
+		family: serif;
+	}
+	line-height: 1em;
+	margin: 1em 0;
+	z-index: 0;
+
+	&:before {
+		@include horizontal_ruler_border;
+		@include horizontal_ruler_border_color($background);
+		
+		position: absolute;
+		top: .5em;
+		content: '\0020';
+		display: block;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		z-index: -1;
+	}
+
+	& > * {
+		background-color: $background;
+		display: inline;
+		padding: 0 .4em;
+	}
+}

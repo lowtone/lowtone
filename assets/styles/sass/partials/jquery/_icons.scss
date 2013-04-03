@@ -1,0 +1,237 @@
+@charset "UTF-8";
+
+// Icons
+
+// States and images
+
+.ui-icon { 
+	width: 16px; 
+	height: 16px; 
+	background-image: url(#{$jquery_image_base}/ui-icons_222222_256x240.png); 
+}
+
+.ui-widget-content .ui-icon {
+	background-image: url(#{$jquery_image_base}/ui-icons_222222_256x240.png); 
+}
+
+.ui-widget-header .ui-icon {
+	background-image: url(#{$jquery_image_base}/ui-icons_222222_256x240.png); 
+}
+
+.ui-state-default .ui-icon { 
+	background-image: url(#{$jquery_image_base}/ui-icons_888888_256x240.png); 
+}
+
+.ui-state-hover .ui-icon, 
+	.ui-state-focus .ui-icon {
+		background-image: url(#{$jquery_image_base}/ui-icons_454545_256x240.png); 
+	}
+
+.ui-state-active .ui-icon {
+	background-image: url(#{$jquery_image_base}/ui-icons_454545_256x240.png); 
+}
+
+.ui-state-highlight .ui-icon {
+	background-image: url(#{$jquery_image_base}/ui-icons_2e83ff_256x240.png); 
+}
+
+.ui-state-error .ui-icon, 
+	.ui-state-error-text .ui-icon {
+		background-image: url(#{$jquery_image_base}/ui-icons_cd0a0a_256x240.png); 
+	}
+
+// Positioning
+
+@mixin sprite_position($x: 0, $y: 0, $size: 16px) {
+	background-position: -($x*$size) -($y*$size);
+}
+
+.ui-icon-carat-1-n { @include sprite_position(0, 0); }
+.ui-icon-carat-1-ne { @include sprite_position(1, 0); }
+.ui-icon-carat-1-e { @include sprite_position(2, 0); }
+.ui-icon-carat-1-se { @include sprite_position(3, 0); }
+.ui-icon-carat-1-s { @include sprite_position(4, 0); }
+.ui-icon-carat-1-sw { @include sprite_position(5, 0); }
+.ui-icon-carat-1-w { @include sprite_position(6, 0); }
+.ui-icon-carat-1-nw { @include sprite_position(7, 0); }
+.ui-icon-carat-2-n-s { @include sprite_position(8, 0); }
+.ui-icon-carat-2-e-w { @include sprite_position(9, 0); }
+
+.ui-icon-triangle-1-n { @include sprite_position(0, 1); }
+.ui-icon-triangle-1-ne { @include sprite_position(1, 1); }
+.ui-icon-triangle-1-e { @include sprite_position(2, 1); }
+.ui-icon-triangle-1-se { @include sprite_position(3, 1); }
+.ui-icon-triangle-1-s { @include sprite_position(4, 1); }
+.ui-icon-triangle-1-sw { @include sprite_position(5, 1); }
+.ui-icon-triangle-1-w { @include sprite_position(6, 1); }
+.ui-icon-triangle-1-nw { @include sprite_position(7, 1); }
+.ui-icon-triangle-2-n-s { @include sprite_position(8, 1); }
+.ui-icon-triangle-2-e-w { @include sprite_position(9, 1); }
+
+.ui-icon-arrow-1-n { @include sprite_position(0, 2); }
+.ui-icon-arrow-1-ne { @include sprite_position(1, 2); }
+.ui-icon-arrow-1-e { @include sprite_position(2, 2); }
+.ui-icon-arrow-1-se { @include sprite_position(3, 2); }
+.ui-icon-arrow-1-s { @include sprite_position(4, 2); }
+.ui-icon-arrow-1-sw { @include sprite_position(5, 2); }
+.ui-icon-arrow-1-w { @include sprite_position(6, 2); }
+.ui-icon-arrow-1-nw { @include sprite_position(7, 2); }
+.ui-icon-arrow-2-n-s { @include sprite_position(8, 2); }
+.ui-icon-arrow-2-ne-sw { @include sprite_position(9, 2); }
+.ui-icon-arrow-2-e-w { @include sprite_position(10, 2); }
+.ui-icon-arrow-2-se-nw { @include sprite_position(11, 2); }
+.ui-icon-arrowstop-1-n { @include sprite_position(12, 2); }
+.ui-icon-arrowstop-1-e { @include sprite_position(13, 2); }
+.ui-icon-arrowstop-1-s { @include sprite_position(14, 2); }
+.ui-icon-arrowstop-1-w { @include sprite_position(15, 2); }
+
+.ui-icon-arrowthick-1-n { @include sprite_position(0, 3); }
+.ui-icon-arrowthick-1-ne { @include sprite_position(1, 3); }
+.ui-icon-arrowthick-1-e { @include sprite_position(2, 3); }
+.ui-icon-arrowthick-1-se { @include sprite_position(3, 3); }
+.ui-icon-arrowthick-1-s { @include sprite_position(4, 3); }
+.ui-icon-arrowthick-1-sw { @include sprite_position(5, 3); }
+.ui-icon-arrowthick-1-w { @include sprite_position(6, 3); }
+.ui-icon-arrowthick-1-nw { @include sprite_position(7, 3); }
+.ui-icon-arrowthick-2-n-s { @include sprite_position(8, 3); }
+.ui-icon-arrowthick-2-ne-sw { @include sprite_position(9, 3); }
+.ui-icon-arrowthick-2-e-w { @include sprite_position(10, 3); }
+.ui-icon-arrowthick-2-se-nw { @include sprite_position(11, 3); }
+.ui-icon-arrowthickstop-1-n { @include sprite_position(12, 3); }
+.ui-icon-arrowthickstop-1-e { @include sprite_position(13, 3); }
+.ui-icon-arrowthickstop-1-s { @include sprite_position(14, 3); }
+.ui-icon-arrowthickstop-1-w { @include sprite_position(15, 3); }
+
+.ui-icon-arrowreturnthick-1-w { @include sprite_position(0, 4); }
+.ui-icon-arrowreturnthick-1-n { @include sprite_position(1, 4); }
+.ui-icon-arrowreturnthick-1-e { @include sprite_position(2, 4); }
+.ui-icon-arrowreturnthick-1-s { @include sprite_position(3, 4); }
+.ui-icon-arrowreturn-1-w { @include sprite_position(4, 4); }
+.ui-icon-arrowreturn-1-n { @include sprite_position(5, 4); }
+.ui-icon-arrowreturn-1-e { @include sprite_position(6, 4); }
+.ui-icon-arrowreturn-1-s { @include sprite_position(7, 4); }
+.ui-icon-arrowrefresh-1-w { @include sprite_position(8, 4); }
+.ui-icon-arrowrefresh-1-n { @include sprite_position(9, 4); }
+.ui-icon-arrowrefresh-1-e { @include sprite_position(10, 4); }
+.ui-icon-arrowrefresh-1-s { @include sprite_position(11, 4); }
+
+.ui-icon-arrow-4 { @include sprite_position(0, 5); }
+.ui-icon-arrow-4-diag { @include sprite_position(1, 5); }
+.ui-icon-extlink { @include sprite_position(2, 5); }
+.ui-icon-newwin { @include sprite_position(3, 5); }
+.ui-icon-refresh { @include sprite_position(4, 5); }
+.ui-icon-shuffle { @include sprite_position(5, 5); }
+.ui-icon-transfer-e-w { @include sprite_position(6, 5); }
+.ui-icon-transferthick-e-w { @include sprite_position(7, 5); }
+
+.ui-icon-folder-collapsed { @include sprite_position(0, 6); }
+.ui-icon-folder-open { @include sprite_position(1, 6); }
+.ui-icon-document { @include sprite_position(2, 6); }
+.ui-icon-document-b { @include sprite_position(3, 6); }
+.ui-icon-note { @include sprite_position(4, 6); }
+.ui-icon-mail-closed { @include sprite_position(5, 6); }
+.ui-icon-mail-open { @include sprite_position(6, 6); }
+.ui-icon-suitcase { @include sprite_position(7, 6); }
+.ui-icon-comment { @include sprite_position(8, 6); }
+.ui-icon-person { @include sprite_position(9, 6); }
+.ui-icon-print { @include sprite_position(10, 6); }
+.ui-icon-trash { @include sprite_position(11, 6); }
+.ui-icon-locked { @include sprite_position(12, 6); }
+.ui-icon-unlocked { @include sprite_position(13, 6); }
+.ui-icon-bookmark { @include sprite_position(14, 6); }
+.ui-icon-tag { @include sprite_position(15, 6); }
+
+.ui-icon-home { @include sprite_position(0, 7); }
+.ui-icon-flag { @include sprite_position(1, 7); }
+.ui-icon-calendar { @include sprite_position(2, 7); }
+.ui-icon-cart { @include sprite_position(3, 7); }
+.ui-icon-pencil { @include sprite_position(4, 7); }
+.ui-icon-clock { @include sprite_position(5, 7); }
+.ui-icon-disk { @include sprite_position(6, 7); }
+.ui-icon-calculator { @include sprite_position(7, 7); }
+.ui-icon-zoomin { @include sprite_position(8, 7); }
+.ui-icon-zoomout { @include sprite_position(9, 7); }
+.ui-icon-search { @include sprite_position(10, 7); }
+.ui-icon-wrench { @include sprite_position(11, 7); }
+.ui-icon-gear { @include sprite_position(12, 7); }
+.ui-icon-heart { @include sprite_position(13, 7); }
+.ui-icon-star { @include sprite_position(14, 7); }
+.ui-icon-link { @include sprite_position(15, 7); }
+
+.ui-icon-cancel { @include sprite_position(0, 8); }
+.ui-icon-plus { @include sprite_position(1, 8); }
+.ui-icon-plusthick { @include sprite_position(2, 8); }
+.ui-icon-minus { @include sprite_position(3, 8); }
+.ui-icon-minusthick { @include sprite_position(4, 8); }
+.ui-icon-close { @include sprite_position(5, 8); }
+.ui-icon-closethick { @include sprite_position(6, 8); }
+.ui-icon-key { @include sprite_position(7, 8); }
+.ui-icon-lightbulb { @include sprite_position(8, 8); }
+.ui-icon-scissors { @include sprite_position(9, 8); }
+.ui-icon-clipboard { @include sprite_position(10, 8); }
+.ui-icon-copy { @include sprite_position(11, 8); }
+.ui-icon-contact { @include sprite_position(12, 8); }
+.ui-icon-image { @include sprite_position(13, 8); }
+.ui-icon-video { @include sprite_position(14, 8); }
+.ui-icon-script { @include sprite_position(15, 8); }
+
+.ui-icon-alert { @include sprite_position(0, 9); }
+.ui-icon-info { @include sprite_position(1, 9); }
+.ui-icon-notice { @include sprite_position(2, 9); }
+.ui-icon-help { @include sprite_position(3, 9); }
+.ui-icon-check { @include sprite_position(4, 9); }
+.ui-icon-bullet { @include sprite_position(5, 9); }
+.ui-icon-radio-off { @include sprite_position(6, 9); }
+.ui-icon-radio-on { @include sprite_position(7, 9); }
+.ui-icon-pin-w { @include sprite_position(8, 9); }
+.ui-icon-pin-s { @include sprite_position(9, 9); }
+
+.ui-icon-play { @include sprite_position(0, 10); }
+.ui-icon-pause { @include sprite_position(1, 10); }
+.ui-icon-seek-next { @include sprite_position(2, 10); }
+.ui-icon-seek-prev { @include sprite_position(3, 10); }
+.ui-icon-seek-end { @include sprite_position(4, 10); }
+.ui-icon-seek-start { @include sprite_position(5, 10); }
+/* ui-icon-seek-first is deprecated, use ui-icon-seek-start instead */
+.ui-icon-seek-first { @include sprite_position(8, 10); }
+.ui-icon-stop { @include sprite_position(9, 10); }
+.ui-icon-eject { @include sprite_position(7, 10); }
+.ui-icon-volume-off { @include sprite_position(8, 10); }
+.ui-icon-volume-on { @include sprite_position(9, 10); }
+
+.ui-icon-power { @include sprite_position(0, 11); }
+.ui-icon-signal-diag { @include sprite_position(1, 11); }
+.ui-icon-signal { @include sprite_position(2, 11); }
+.ui-icon-battery-0 { @include sprite_position(3, 11); }
+.ui-icon-battery-1 { @include sprite_position(4, 11); }
+.ui-icon-battery-2 { @include sprite_position(5, 11); }
+.ui-icon-battery-3 { @include sprite_position(6, 11); }
+
+.ui-icon-circle-plus { @include sprite_position(0, 12); }
+.ui-icon-circle-minus { @include sprite_position(1, 12); }
+.ui-icon-circle-close { @include sprite_position(2, 12); }
+.ui-icon-circle-triangle-e { @include sprite_position(3, 12); }
+.ui-icon-circle-triangle-s { @include sprite_position(4, 12); }
+.ui-icon-circle-triangle-w { @include sprite_position(5, 12); }
+.ui-icon-circle-triangle-n { @include sprite_position(6, 12); }
+.ui-icon-circle-arrow-e { @include sprite_position(7, 12); }
+.ui-icon-circle-arrow-s { @include sprite_position(8, 12); }
+.ui-icon-circle-arrow-w { @include sprite_position(9, 12); }
+.ui-icon-circle-arrow-n { @include sprite_position(10, 12); }
+.ui-icon-circle-zoomin { @include sprite_position(11, 12); }
+.ui-icon-circle-zoomout { @include sprite_position(12, 12); }
+.ui-icon-circle-check { @include sprite_position(13, 12); }
+
+.ui-icon-circlesmall-plus { @include sprite_position(0, 13); }
+.ui-icon-circlesmall-minus { @include sprite_position(1, 13); }
+.ui-icon-circlesmall-close { @include sprite_position(2, 13); }
+.ui-icon-squaresmall-plus { @include sprite_position(3, 13); }
+.ui-icon-squaresmall-minus { @include sprite_position(4, 13); }
+.ui-icon-squaresmall-close { @include sprite_position(5, 13); }
+
+.ui-icon-grip-dotted-vertical { @include sprite_position(0, 14); }
+.ui-icon-grip-dotted-horizontal { @include sprite_position(1, 14); }
+.ui-icon-grip-solid-vertical { @include sprite_position(2, 14); }
+.ui-icon-grip-solid-horizontal { @include sprite_position(3, 14); }
+.ui-icon-gripsmall-diagonal-se { @include sprite_position(4, 14); }
+.ui-icon-grip-diagonal-se { @include sprite_position(5, 14); }

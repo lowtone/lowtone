@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+$base: #ccc !default;
+
+// jQuery UI Tabs 1.8.23
+
+.lowtone.ui-tabs { 
+	background-color: $base;
+	position: relative; // position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed")
+	padding: .4em; 
+	zoom: 1; 
+	border: none;
+	margin-bottom: 1em;
+
+	.ui-tabs-nav { 
+		margin: 0; 
+		padding: 0 .2em; 
+		border: none;
+		background: none;
+
+		li { 
+			list-style: none; 
+			float: left; 
+			position: relative; 
+			top: 1px; 
+			margin: 0 .2em 1px 0; 
+			border-bottom: 0 !important; 
+			padding: 0; 
+			white-space: nowrap; 
+
+			a { 
+				float: left; 
+				padding: .5em 1em; 
+				text-decoration: none; 
+			}
+
+			&.ui-tabs-selected { 
+				margin-bottom: 0; 
+				padding-bottom: 1px; 
+			}
+
+			&.ui-tabs-selected a, 
+				&.ui-state-disabled a, 
+				&.ui-state-processing a { 
+					cursor: text; 
+				}
+
+		}
+	}
+
+	.ui-tabs-nav li a, 
+		&.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { 
+			cursor: pointer; // first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere...
+		} 
+
+	.ui-tabs-panel { 
+		display: block; 
+		border-width: 0; 
+		padding: 1em 1.4em; 
+		background: none; 
+		background-color: #fff;
+		@include clear;
+
+		hr {
+			@include horizontal_ruler_color($base, #fff, !important);
+		}
+	}
+
+	.ui-tabs-hide { 
+		display: none !important; 
+	}
+} 

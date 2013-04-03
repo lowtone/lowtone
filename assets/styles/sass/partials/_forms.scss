@@ -1,0 +1,124 @@
+@charset "UTF-8";
+
+/* Form */
+
+fieldset.lowtone {
+	margin-bottom: 1em; 
+	
+	legend {
+		@include line($background: #F5F5F5);
+		width: 100%;
+		padding: 0;
+	}
+}
+
+table.slidetoggle {
+	fieldset.lowtone {
+		legend {
+			@include line($background: #fff);
+		}
+	}
+}
+
+label.lowtone {
+	float: left; 
+	width: 15%; 
+	line-height: 15px; 
+	padding: 4px 0;
+
+	&:after {
+		content: ":";
+	}
+}
+
+
+.inner-sidebar,
+	#side-sortables,
+	#widgets-right {
+		label.lowtone {
+			width: 30%;
+		}
+	}
+	
+input.lowtone.text, 
+	textarea.lowtone,
+	select.lowtone {
+		display: block; 
+		margin-bottom: 1em; 
+		width: 95%; 
+		@include box_sizing(border-box);
+
+		&.setting {
+			margin: 0;
+			width: auto;
+		}
+	}
+
+select.lowtone.multiple {
+	height: auto; 
+	min-height: 200px;
+}
+
+textarea.lowtone { 
+	height: 200px;
+}
+
+label.lowtone {
+	& + input.lowtone.text,
+		& + textarea.lowtone,
+		& + select.lowtone {
+			margin-left: 15%; 
+			width: 80%;
+
+			& + .lowtone.comment {
+				margin-left: 15%;
+				width: 80%;
+			}
+		}
+}
+
+
+.inner-sidebar,
+	#side-sortables,
+	#widgets-right {
+		label.lowtone {
+			& + input.lowtone.text,
+				& + textarea.lowtone,
+				& + select.lowtone {
+					margin-left: 30%; 
+					width: 65%;
+				}
+		}
+	}
+
+.lowtone.radio,
+	.lowtone.checkbox {
+		float: left; 
+		margin-top: 5px;
+		width: auto;
+
+		& + label.lowtone {
+			float: none; 
+			display: block; 
+			margin-left: 24px; 
+			width: 80% !important;
+
+			&:after {
+				display: none;
+			}
+		}
+	}
+	
+.lowtone.comment {
+	font-size: .85em; 
+	font-style: italic; 
+	line-height: normal;
+}
+
+.lowtone.ajax-loading {
+	vertical-align: middle;
+}
+
+.lowtone.ajax-loading + input.lowtone.button {
+	margin-left: 4px;
+}

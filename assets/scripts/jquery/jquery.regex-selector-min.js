@@ -1,0 +1,1 @@
+jQuery.expr[":"].regex=function(g,d,c){var h=c[3].split(","),b=/^(data|css):/,a={method:h[0].match(b)?h[0].split(":")[0]:"attr",property:h.shift().replace(b,"")},f="ig",e=new RegExp(h.join("").replace(/^\s+|\s+$/g,""),f);return e.test(jQuery(g)[a.method](a.property))};

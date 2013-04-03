@@ -1,0 +1,1 @@
+(function(a){a(function(){var c={beforeShow:function(){a("#ui-datepicker-div").css("z-index",500)},showOtherMonths:true,selectOtherMonths:true,dateFormat:"yy-mm-dd"},b=a.extend(b,c,{timeFormat:"hh:mm:ss",hourGrid:4,minuteGrid:10});a("form .date").each(function(){var d=a(this);if(d.hasClass("time")){d.datetimepicker(b)}else{d.datepicker(c)}})})})(jQuery);

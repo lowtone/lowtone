@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+.postbox,
+	.widgets-holder-wrap {
+		
+		.lowtone.line {
+			@include line($background: #F5F5F5, $foreground: #777);
+		}
+		
+		&.lowtone {
+
+			/*
+				The Lowtone postbox:
+
+				<div class="postbox lowtone">
+					<header>
+						<h1>Hello World!</h1>
+						<div class="more"></div>
+						<hr class="lowtone">
+					</header>
+					<div class="inside"></div>
+				</div>		 
+			*/
+
+			border: none;
+			background: none;
+
+			header {
+				padding: 1em 0;
+				font-size: 1.2em;
+
+				h1 {
+					float: left;
+					margin: 0;
+					display: inline-block;
+					font-size: 1em;
+					background-color: white;
+					padding-right: .5em;
+				}
+
+				.more {
+					float: right;
+					width: 1em;
+					height: 1em;
+					background-size: 100% auto;
+				}
+
+				hr.lowtone {
+					clear: none;
+					margin: .5em 0;
+				}
+			}
+		}
+}

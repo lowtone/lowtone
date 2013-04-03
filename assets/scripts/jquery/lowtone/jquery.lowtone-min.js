@@ -1,0 +1,1 @@
+(function(a){a(function(){if(!a.browser.webkit){a("fieldset.lowtone legend").attr("align","center")}})})(jQuery);

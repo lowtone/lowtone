@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+/**
+ * Button examples at:
+ * - http://www.red-team-design.com/css3-patterned-buttons (patterns)
+ * - http://www.red-team-design.com/just-another-awesome-css3-buttons (icons)
+ * - http://www.red-team-design.com/cross-browser-css-gradient-buttons (gradients)
+ */
+
+@mixin single_border_radius($border_radius, $select: "top-left") {
+	border-radius-#{$select}: $border_radius;
+	-moz-border-radius-#{$select}: $border_radius;
+	-webkit-border-radius-#{$select}: $border_radius;
+}
+
+@mixin button($color: #ddd, $border_radius: .4em) {
+	padding: ($border_radius*2) ($border_radius*3);
+
+	&.alpha {
+		@include single_border_radius($border_radius, "top-left");
+		@include single_border_radius($border_radius, "bottom-left");
+	}
+
+	&.omega {
+		@include single_border_radius($border_radius, "top-right");
+		@include single_border_radius($border_radius, "bottom-right");
+	}
+}
+
+.button.lowtone {
+	@include button;
+}

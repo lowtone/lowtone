@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+/* Clearing */
+
+@mixin _clear {
+	clear: both;
+	content: '\0020';
+	display: block;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+}
+
+@mixin _reset_clear {
+	clear: none;
+	content: '';
+	display: none;
+}
+
+@mixin clear($what: both) {
+	@if before == $what {
+		&:before {
+			@include _clear;
+		}
+	} @elseif after == $what {
+		&:after {
+			@include _clear;
+		}
+	} @elseif none == $what {
+		&:before,
+			&:after {
+				@include _reset_clear;
+			}
+	} @else {
+		&:before, 
+			&:after {
+				@include _clear;
+			}
+	}
+}
+
+.clearfix {
+	@include clear;
+}

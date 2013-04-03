@@ -1,0 +1,334 @@
+@charset "UTF-8";
+
+$margin_width: 1%;
+$column_width: 100%/16;
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Container */
+
+.container {
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	width: 960px;
+}
+
+/* Rows */
+
+.row {
+	@include box_sizing(border-box);
+	margin-bottom: 1.25em;
+	overflow: hidden;
+
+	.column, .columns {
+		min-height: 100%;
+	}
+}
+
+.half.row {height: 7em;}
+.single.row {height: 12em;}
+.double.row {height: 20em;}
+
+/* Base Grid */
+
+@mixin column_width($num, $margins: $margin_width*2) {
+	width: ($num*$column_width)-$margins;
+}
+
+/* Columns */
+
+.column,
+	.columns {
+		@include box_sizing(border-box);
+		display: inline;
+		float: left;
+		margin-left: $margin_width;
+		margin-right: $margin_width;
+
+		&.one {@include column_width(1);}
+		&.two {@include column_width(2);}
+		&.three {@include column_width(3);}
+		&.four {@include column_width(4);}
+		&.five {@include column_width(5);}
+		&.six {@include column_width(6);}
+		&.seven {@include column_width(7);}
+		&.eight,
+			&.half {@include column_width(8);}
+		&.nine {@include column_width(9);}
+		&.ten {@include column_width(10);}
+		&.eleven {@include column_width(11);}
+		&.twelve {@include column_width(12);}
+		&.thirteen {@include column_width(13);}
+		&.fourteen {@include column_width(14);}
+		&.fifteen {@include column_width(15);}
+		&.sixteen,
+			&.full {@include column_width(16);}
+
+	
+		$oneThird: 100%/3;
+
+		&.one-third {width: $oneThird*1-$margin_width*2;}
+		&.two-thirds {width: $oneThird*2-$margin_width*2;}
+
+		/* Nested Column Classes */
+
+		&.alpha {margin-left: 0;}
+		&.omega {margin-right: 0;}
+			
+		/* Alpha or omega */
+			
+		&.one.alpha,
+			&.one.omega {@include column_width(1, $margin_width);}
+		&.two.alpha,
+			&.two.omega {@include column_width(2, $margin_width);}
+		&.three.alpha,
+			&.three.omega {@include column_width(3, $margin_width);}
+		&.four.alpha,
+			&.four.omega {@include column_width(4, $margin_width);}
+		&.five.alpha,
+			&.five.omega {@include column_width(5, $margin_width);}
+		&.six.alpha,
+			&.six.omega {@include column_width(6, $margin_width);}
+		&.seven.alpha,
+			&.seven.omega {@include column_width(7, $margin_width);}
+		&.eight.alpha,
+			&.eight.omega,
+			&.half.alpha,
+			&.half.omega {@include column_width(8, $margin_width);}
+		&.nine.alpha,
+			&.nine.omega {@include column_width(9, $margin_width);}
+		&.ten.alpha,
+			&.ten.omega {@include column_width(10, $margin_width);}
+		&.eleven.alpha,
+			&.eleven.omega {@include column_width(11, $margin_width);}
+		&.twelve.alpha,
+			&.twelve.omega {@include column_width(12, $margin_width);}
+		&.thirteen.alpha,
+			&.thirteen.omega {@include column_width(13, $margin_width);}
+		&.fourteen.alpha,
+			&.fourteen.omega {@include column_width(14, $margin_width);}
+		&.fifteen.alpha,
+			&.fifteen.omega {@include column_width(15, $margin_width);}
+		&.sixteen.alpha,
+			&.sixteen.omega,
+			&.full.alpha,
+			&.full.omega {@include column_width(16, $margin_width);}
+			
+
+		&.one-third.alpha,
+			&.one-third.omega {width: $oneThird*1-$margin_width;}
+		&.two-thirds.alpha,
+			&.two-thirds.omega {width: $oneThird*2-$margin_width;}
+			
+		/* Alpha and omega */
+
+		&.one.alpha.omega {@include column_width(1, 0);}
+		&.two.alpha.omega {@include column_width(2, 0);}
+		&.three.alpha.omega.alpha.omega {@include column_width(3, 0);}
+		&.four.alpha.omega {@include column_width(4, 0);}
+		&.five.alpha.omega {@include column_width(5, 0);}
+		&.six.alpha.omega {@include column_width(6, 0);}
+		&.seven.alpha.omega {@include column_width(7, 0);}
+		&.eight.alpha.omega,
+			&.half.alpha.omega {@include column_width(8, 0);}
+		&.nine.alpha.omega {@include column_width(9, 0);}
+		&.ten.alpha.omega {@include column_width(10, 0);}
+		&.eleven.alpha.omega {@include column_width(11, 0);}
+		&.twelve.alpha.omega {@include column_width(12, 0);}
+		&.thirteen.alpha.omega {@include column_width(13, 0);}
+		&.fourteen.alpha.omega {@include column_width(14, 0);}
+		&.fifteen.alpha.omega {@include column_width(15, 0);}
+		&.sixteen.alpha.omega,
+			&.full.alpha.omega {@include column_width(16, 0);}
+
+		&.one-third.alpha.omega {width: $oneThird;}
+		&.two-thirds.alpha.omega {width: $oneThird*2;}
+}
+
+.rtl {
+
+	.column,
+		.columns {
+			float: right;
+		}
+}
+
+/* Offsets (column base width + margin) */
+
+@mixin offsetWidth($num) {
+	padding-left: $num*$column_width;
+}
+
+.offset-by-one {@include offsetWidth(1);}
+.offset-by-two {@include offsetWidth(2);}
+.offset-by-three {@include offsetWidth(3);}
+.offset-by-four {@include offsetWidth(4);}
+.offset-by-five {@include offsetWidth(5);}
+.offset-by-six {@include offsetWidth(6);}
+.offset-by-seven {@include offsetWidth(7);}
+.offset-by-eight {@include offsetWidth(8);}
+.offset-by-nine {@include offsetWidth(9);}
+.offset-by-ten {@include offsetWidth(10);}
+.offset-by-eleven {@include offsetWidth(11);}
+.offset-by-twelve {@include offsetWidth(12);}
+.offset-by-thirteen {@include offsetWidth(13);}
+.offset-by-fourteen {@include offsetWidth(14);}
+.offset-by-fifteen {@include offsetWidth(15);}
+
+/* Screen sizes between 768px and 960px */
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+	
+	.container {
+		width: 768px;
+	}
+	
+}
+
+/* Screen sizes less than 768px */
+
+@media only screen and (max-width: 767px) {
+	
+	.container {
+		width: 100%;
+	}
+	
+	/* Rows */
+	
+	.row,
+		.half.row,
+		.single.row,
+		.double.row {height: auto;}
+		
+	/* Columns */
+	
+	/* Base grid */
+
+	.column,
+		.columns {
+	
+			&.one,
+				&.two,
+				&.three,
+				&.four,
+				&.five,
+				&.six,
+				&.seven,
+				&.eight,
+				&.half,
+				&.nine,
+				&.ten,
+				&.eleven,
+				&.twelve,
+				&.thirteen,
+				&.fourteen,
+				&.fifteen,
+				&.sixteen,
+				&.full,
+				&.one-third,
+				&.two-thirds {width: 100%-$margin_width*2;}
+		
+			/* Alpha or omega */
+			
+			&.one.alpha, &.one.omega,
+				&.two.alpha, &.two.omega,
+				&.three.alpha, &.three.omega,
+				&.four.alpha, &.four.omega,
+				&.five.alpha, &.five.omega,
+				&.six.alpha, &.six.omega,
+				&.seven.alpha, &.seven.omega,
+				&.eight.alpha, &.eight.omega,
+				&.half.alpha, &.half.omega,
+				&.nine.alpha, &.nine.omega,
+				&.ten.alpha, &.ten.omega,
+				&.eleven.alpha, &.eleven.omega,
+				&.twelve.alpha, &.twelve.omega,
+				&.thirteen.alpha, &.thirteen.omega,
+				&.fourteen.alpha, &.fourteen.omega,
+				&.fifteen.alpha, &.fifteen.omega,
+				&.sixteen.alpha, &.sixteen.omega,
+				&.full.alpha, &.full.omega,
+				&.one-third.alpha, &.one-third.omega,
+				&.two-thirds.alpha, &.two-thirds.omega {width: 100%-$margin_width;}
+				
+			/* Alpha and omega */
+			
+			&.one.alpha.omega,
+				&.two.alpha.omega,
+				&.three.alpha.omega,
+				&.four.alpha.omega,
+				&.five.alpha.omega,
+				&.six.alpha.omega,
+				&.seven.alpha.omega,
+				&.eight.alpha.omega,
+				&.half.alpha.omega,
+				&.nine.alpha.omega,
+				&.ten.alpha.omega,
+				&.eleven.alpha.omega,
+				&.twelve.alpha.omega,
+				&.thirteen.alpha.omega,
+				&.fourteen.alpha.omega,
+				&.fifteen.alpha.omega,
+				&.sixteen.alpha.omega,
+				&.full.alpha.omega,
+				&.one-third.alpha.omega,
+				&.two-thirds.alpha.omega {width: 100%;}
+
+		}
+
+	/* Offsets */
+		
+	.offset-by-one,
+		.offset-by-two,
+		.offset-by-three,
+		.offset-by-four,
+		.offset-by-five,
+		.offset-by-six,
+		.offset-by-seven,
+		.offset-by-eight,
+		.offset-by-nine,
+		.offset-by-ten,
+		.offset-by-eleven,
+		.offset-by-twelve,
+		.offset-by-thirteen,
+		.offset-by-fourteen,
+		.offset-by-fifteen {padding-left: 0;}
+		
+}
+
+/* Screen sizes between 480px and 768px (exceptions on the basic styles for screen sizes below 768px) */
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	
+	/* Base grid */
+
+	.column,
+		.columns {
+	
+			&.eight,
+				&.half {@include column_width(8);}
+				
+			/* Alpha or omega */
+				
+			&.eight.alpha,
+				&.eight.omega,
+				&.half.alpha,
+				&.half.omega {@include column_width(8, $margin_width);}
+				
+			/* Alpha and omega */
+				
+			&.eight.alpha.omega,
+				&.half.alpha.omega {@include column_width(8, 0);}
+
+		}
+		
+	/* Offsets */
+		
+	.offset-by-eight {@include offsetWidth(8);}
+		
+}
