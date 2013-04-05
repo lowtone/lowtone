@@ -2,6 +2,7 @@
 /*
  * Plugin Name: Lowtone Library for WordPress
  * Plugin URI: http://wordpress.lowtone.nl/lib
+ * Plugin Type: lib
  * Description: Lowtone library.
  * Version: 1.0
  * Author: Lowtone <info@lowtone.nl>
