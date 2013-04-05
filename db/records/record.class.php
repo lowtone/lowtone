@@ -401,7 +401,7 @@ abstract class Record extends Object {
 	private static function __createFromQuery($query, array $options = NULL) {
 		global $wpdb;
 
-		return static::__createFromResults($wpdb->get_results($wpdb->prepare($query)), $options);
+		return static::__createFromResults($wpdb->get_results($query), $options);
 	}
 
 	/**

@@ -281,7 +281,7 @@ abstract class Lowtone {
 				foreach ($scripts as $handle => $script) {
 
 					call_user_func_array(
-							($script["enqueue"] ? "wp_enqueue_script" : "wp_register_script"),
+							(@$script["enqueue"] ? "wp_enqueue_script" : "wp_register_script"),
 							array(
 									$handle,
 									@$script["raw_src"] ?: @$script["src"] . (@$script["min"] && !Util::isScriptDebug() ? "-min" : "") . ".js",

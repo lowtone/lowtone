@@ -17,7 +17,7 @@ class Options extends Map {
 	 * @return array Returns the resulting option set.
 	 */
 	public function updateOptions(array $options) {
-		return $this->setOptions($this->mergeRecursive($options));
+		return $this->setOptions((array) $this->mergeRecursive($options));
 	}
 	
 	// Getters

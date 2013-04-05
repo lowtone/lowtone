@@ -106,9 +106,8 @@ class InputDocument extends FormElementDocument {
 					return $optGroupElement;
 				};
 				
-				for ($values = (array) $this->itsInput->getValue(); list($key, $value) = each($values);) {
-					$element = is_array($value) ? $createOptGroup($inputElement, $value, $altValues[$key], $key) : $createOption($inputElement, $value, $altValues[$key]);
-				}
+				for ($values = (array) $this->itsInput->getValue(); list($key, $value) = each($values);) 
+					$element = is_array($value) ? $createOptGroup($inputElement, $value, @$altValues[$key], $key) : $createOption($inputElement, $value, @$altValues[$key]);
 				
 				break;
 			

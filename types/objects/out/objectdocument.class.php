@@ -90,7 +90,7 @@ class ObjectDocument extends Document {
 	 * @return array Returns the filtered properties.
 	 */
 	protected function applyPropertyFilters($properties) {
-		return $this->itsObject->filterProperties($this->getBuildOption(self::PROPERTY_FILTERS), NULL, $properties);
+		return $this->itsObject->filterProperties((array) $this->getBuildOption(self::PROPERTY_FILTERS), NULL, $properties);
 	}
 
 	/**

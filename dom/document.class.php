@@ -105,8 +105,8 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 		}
 		
 		
-		if (is_array($value))
-			$element->appendCreateElements($value);
+		if (is_array($value) || is_object($value))
+			$element->appendCreateElements((array) $value);
 		else if (!is_null($value))
 			$element->appendChild($this->createTextNode($value));
 		
@@ -251,7 +251,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	 * @param DOMDocument $template The template to apply to the document.
 	 * @return bool Returns TRUE on success or FALSE on failure.
 	 */
-	public function transform($template) {
+	public function transform($template = NULL) {
 		if (!$template) {
 			// Force static load call
 			$template = new DOMDocument(); 
