@@ -76,13 +76,16 @@ abstract class Lowtone {
 		if (!defined("LOWTONE_ERROR_LOGGING"))
 			define("LOWTONE_ERROR_LOGGING", E_ERROR | E_WARNING | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
 		
-		set_error_handler(function($severity, $message, $filename, $lineno) use ($log) {
+		$prevErrorHandler = set_error_handler(function($severity, $message, $filename, $lineno) use ($log) {
+			
+			// Always returns FALSE to have the default error handler pick up the error.
+			
 			if (!LOWTONE_LOG_ERRORS) 
-				return;
+				return false;
 
 			if (!($severity & LOWTONE_ERROR_LOGGING)) 
-				return;
-
+				return false;
+			
 			$types = array(
 					E_ERROR => "Error",
 					E_WARNING => "Warning",
@@ -104,9 +107,8 @@ abstract class Lowtone {
 			$type = isset($types[$severity]) ? $types[$severity] : "Unknown error";
 
 			$log->write(sprintf("%s: %s in %s on line %s", $type, $message, $filename, $lineno));
-			
-			// No return value to execute PHP internal error handler
-			
+
+			return false;
 		});
 		
 		// Styles
