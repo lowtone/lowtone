@@ -108,10 +108,6 @@ abstract class Lowtone {
 			// No return value to execute PHP internal error handler
 			
 		});
-
-		// Admin notices
-		
-		wp\admin\notices\Notice::init();
 		
 		// Styles
 		

@@ -12,6 +12,9 @@
 
 namespace lowtone {
 	
+	if (!class_exists("lowtone\\content\\packages\\Package"))
+		return false;
+	
 	// Init utils
 	
 	include_once "lowtone.class.php";
