@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: Lowtone Lib
+ * Plugin Name: Lowtone Library for WordPress
  * Plugin URI: http://wordpress.lowtone.nl/lib
  * Description: Lowtone library.
  * Version: 1.0
