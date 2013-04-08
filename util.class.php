@@ -14,14 +14,6 @@ abstract class Util {
 	
 	// Including & autoloading
 	
-	/**
-	 * Add a merged path to the Loader class.
-	 * @param string $path The path template register as merged path.
-	 */
-	public static function addMergedPath($path) {
-		return Loader::addMergedPath($path);
-	}
-	
 	// File data
 	
 	private static function extractFileData($file, $property = NULL) {
@@ -301,6 +293,17 @@ abstract class Util {
 	 */
 	public static function mergeArgs(array $args) {
 		return call_user_func_array('array_merge', array_map(function($param) {return (array) $param;}, (array) $args));
+	}
+
+	// Deprecated
+	
+	/**
+	 * Add a merged path to the Loader class.
+	 * @deprecated Moved to lowtone\util\loading\Loader::addMergedPath()
+	 * @param string $path The path template register as merged path.
+	 */
+	public static function addMergedPath($path) {
+		return Loader::addMergedPath($path);
 	}
 	
 }
