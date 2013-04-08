@@ -76,10 +76,10 @@ class ObjectDocument extends Document {
 	 */
 	protected function filterProperties($properties) {
 		if ($filters = $this->getBuildOption(self::FILTER_PROPERTIES))
-			$properties = Object::applyFilters($properties, $filters);
+			$properties = Object::applyFilters($properties, $filters, array($this));
 
 		if ($this->getBuildOption(self::APPLY_WP_FILTERS))
-			$properties = apply_filters("object_document_properties", $properties);
+			$properties = apply_filters("object_document_properties", $properties, $this);
 
 		return $properties;
 	}

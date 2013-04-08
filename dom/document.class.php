@@ -40,8 +40,10 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	
 	const ELEMENT_CLASS = "lowtone\\dom\\Element";
 
-	const TYPE_XML = "xml",
-		TYPE_HTML = "html";
+	const OPTION_CONTENT_TYPE = "content_type";
+
+	const CONTENT_TYPE_XML = "text/xml",
+		CONTENT_TYPE_HTML = "text/html";
 	
 	/**
 	 * Constructor for the Document.
@@ -93,7 +95,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 			$name = call_user_func($this->itsElementNameFilter, $name, $this);
 
 		try {
-			$element = $name instanceof DOMElement ? $name : parent::createElement($name);	
+			$element = $name instanceof DOMElement ? $name : parent::createElement((string) $name);	
 		} catch (DOMException $e) {
 			$e = new exceptions\CreateElementException($e->getMessage(), $e->getCode(), $e);
 
@@ -104,8 +106,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 			throw $e;
 		}
 		
-		
-		if (is_array($value) || is_object($value))
+		if (is_array($value) || $value instanceof \stdClass)
 			$element->appendCreateElements((array) $value);
 		else if (!is_null($value))
 			$element->appendChild($this->createTextNode($value));
@@ -117,7 +118,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 		if (!is_string($content) && is_callable($content))
 			$content = call_user_func($content);
 
-		return parent::createTextNode($content);
+		return parent::createTextNode((string) $content);
 	}
 	
 	/**
@@ -273,17 +274,18 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 		return $this;
 	}
 	
-	public function out($type = self::TYPE_XML) {
-		header("Content-Type: text/" . $type);
+	public function out(array $options = NULL) {
+		$type = @$options[self::OPTION_CONTENT_TYPE] ?: self::CONTENT_TYPE_XML;
+
+		header("Content-Type: " . $type . "; charset=" . strtolower($this->encoding));
 		
 		switch ($type) {
-			case self::TYPE_XML;
-				echo $this->saveXML();
-				break;
-
-			case self::TYPE_HTML:
+			case self::CONTENT_TYPE_HTML:
 				echo $this->saveHtml();
 				break;
+
+			default:
+				echo $this->saveXML();
 		}
 
 		ob_flush();

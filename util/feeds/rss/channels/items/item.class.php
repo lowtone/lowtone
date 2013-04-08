@@ -43,11 +43,11 @@ class Item extends Record {
 
 		$item = new static(array(
 				self::PROPERTY_TITLE => html_entity_decode(get_the_title_rss()),
-				self::PROPERTY_LINK => $post->getPermaLink(),
+				self::PROPERTY_LINK => ($permalink = get_permalink($post->ID)),
 				self::PROPERTY_DESCRIPTION => html_entity_decode(@$options[self::CREATE_FULL_DESCRIPTION] ? Util::catchOutput("the_content_rss") : Util::catchOutput("the_excerpt_rss")),
 				self::PROPERTY_PUB_DATE => $post->getPostDate()->format("r"),
 				self::PROPERTY_GUID => $post->getGuid(),
-				self::PROPERTY_COMMENTS => $post->getPermaLink() . "#comments"
+				self::PROPERTY_COMMENTS => $permalink . "#comments"
 			));
 
 		if (@$options[self::CREATE_IMAGE] && ($imageId = get_post_thumbnail_id($post->getPostId())) && ($image = wp_get_attachment_image_src($imageId, @$options[self::IMAGE_SIZE]))) {
@@ -62,10 +62,10 @@ class Item extends Record {
 
 		}
 
-		$properties = $item->filterProperties(@$options[self::CREATE_PROPERTY_FILTERS], array($post, @$attachment));
+		$properties = $item->filterProperties((array) @$options[self::CREATE_PROPERTY_FILTERS], array($post, @$attachment));
 
 		$properties = apply_filters("rss_create_item_properties", $properties, $post, @$attachment);
-
+		
 		return new static($properties);
 	}
 

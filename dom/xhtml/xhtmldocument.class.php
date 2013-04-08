@@ -29,7 +29,7 @@ class XHTMLDocument extends Document {
 		"param"
 	);
 
-	const TYPE_XHTML = "xhtml";
+	const CONTENT_TYPE_XHTML = "text/xhtml";
 	
 	public function saveXHTML(DOMNode $node = NULL) {
 		if (!$node) 
@@ -55,11 +55,13 @@ class XHTMLDocument extends Document {
 
 	}
 
-	public function out($type = self::TYPE_XHTML) {
+	public function out(array $options = NULL) {
+		$type = @$options[self::OPTION_CONTENT_TYPE] ?: self::CONTENT_TYPE_XHTML;
+
 		if ($type != self::TYPE_XHTML)
 			return parent::out($type);
 
-		header("Content-Type: text/" . $type);
+		header("Content-Type: " . $type);
 
 		echo $this->saveXHTML();
 

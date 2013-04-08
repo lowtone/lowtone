@@ -50,4 +50,12 @@ class RssDocument extends ObjectDocument {
 		return $this;
 	}
 
+	public function out(array $options = NULL) {
+		$options = array_merge(array(
+				self::OPTION_CONTENT_TYPE => "application/rss+xml"
+			), (array) $options);
+		
+		return parent::out($options);
+	}
+
 }
