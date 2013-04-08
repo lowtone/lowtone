@@ -1,6 +1,7 @@
 <?php
 namespace lowtone;
-use lowtone\util\loading\Loader;
+use lowtone\content\packages\Package,
+	lowtone\util\loading\Loader;
 
 /**
  * @author Paul van der Meijs <code@lowtone.nl>
@@ -322,6 +323,17 @@ abstract class Lowtone {
 				);
 
 			return $schedules;
+		});
+
+		// Add merged path on package init
+		
+		add_action("lowtone_content_package_init", function($options) {
+
+			if (!($mergedPath = @$options[Package::INIT_MERGED_PATH]))
+				return;
+
+			Loader::addMergedPath($mergedPath);
+
 		});
 		
 		return true;
