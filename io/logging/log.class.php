@@ -17,6 +17,8 @@ class Log {
 		$itsFp,
 		$itsBuffer;
 
+	protected static $__instances;
+
 	public function __construct($path = NULL) {
 		$this
 			->file($path ?: tempnam(sys_get_temp_dir(), "log"))
@@ -116,6 +118,15 @@ class Log {
 		$this->itsDisabled = (bool) $disabled;
 
 		return $this;
+	}
+
+	// Static
+	
+	public static function __instance($file) {
+		if (($log = @self::$__instances[$file]) instanceof Log)
+			return $log;
+
+		return ($__instances[$file] = new Log($file));
 	}
 
 }

@@ -52,10 +52,13 @@ abstract class Lowtone {
 
 		// Log
 		
-		if (!defined("LOWTONE_LOG"))
-			define("LOWTONE_LOG", WP_CONTENT_DIR . "/logs/lowtone-%Y%m%d.log");
+		if (!defined("LOG_DIR"))
+			define("LOG_DIR", WP_CONTENT_DIR . DIRECTORY_SEPARATOR . "log");
 		
-		$log = new io\logging\Log(strftime(LOWTONE_LOG));
+		if (!defined("LOWTONE_LOG"))
+			define("LOWTONE_LOG", strftime(LOG_DIR . DIRECTORY_SEPARATOR . "lowtone-%Y%m%d.log"));
+		
+		$log = new io\logging\Log(LOWTONE_LOG);
 
 		$log->disabled(!Util::isDebug());
 		
