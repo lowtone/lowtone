@@ -143,7 +143,7 @@ abstract class Record extends Object {
 	// Property access
 	
 	public function offsetGet($index) {
-		$value = parent::offsetGet($index);
+		$value = @parent::offsetGet($index);
 
 		// Apply getters
 		

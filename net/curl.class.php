@@ -23,7 +23,7 @@ class Curl {
 	}
 
 	public function __destruct() {
-		curl_close($this->itsHandle);
+		@curl_close($this->itsHandle);
 	}
 
 	public function __call($name, $arguments) {

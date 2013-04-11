@@ -116,7 +116,7 @@ class Collection extends XArray implements Documentable {
 		}
 
 		if (($offset = @$options[self::OPTION_OFFSET]) || ($limit = @$options[self::OPTION_LIMIT])) 
-			$objects = array_slice($objects, $offset, $limit);
+			$objects = array_slice($objects, $offset, @$limit);
 		
 		return static::create($objects, $this);
 	}
