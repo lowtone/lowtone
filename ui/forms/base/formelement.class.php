@@ -93,6 +93,14 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 			->transform()
 			->saveHTML();
 	}
+
+	public function __toString() {
+		return $this
+			->createDocument()
+			->build()
+			->transform()
+			->saveHTML();
+	}
 	
 	// Getters
 	
