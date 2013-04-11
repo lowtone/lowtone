@@ -26,11 +26,6 @@ abstract class Lowtone {
 
 		if (!session_id())
 			session_start();
-
-		// Define LIB_DIR
-		
-		if (!defined("LIB_DIR"))
-			define("LIB_DIR", dirname(__DIR__));
 		
 		// Autoloading
 		
@@ -45,10 +40,6 @@ abstract class Lowtone {
 			realpath(ABSPATH.PLUGINDIR),
 			realpath(get_theme_root())
 		));
-
-		// Define LIB_URL
-
-		define("LIB_URL", site_url(preg_replace("#\\\\+#", "/", Util::getRelPath(LIB_DIR))));
 
 		// Log
 		
