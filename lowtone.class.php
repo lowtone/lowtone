@@ -44,7 +44,7 @@ abstract class Lowtone {
 		// Log
 		
 		if (!defined("LOG_DIR"))
-			define("LOG_DIR", WP_CONTENT_DIR . DIRECTORY_SEPARATOR . "log");
+			define("LOG_DIR", WP_CONTENT_DIR . DIRECTORY_SEPARATOR . "logs");
 		
 		if (!defined("LOWTONE_LOG"))
 			define("LOWTONE_LOG", strftime(LOG_DIR . DIRECTORY_SEPARATOR . "lowtone-%Y%m%d.log"));
