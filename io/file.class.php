@@ -60,6 +60,9 @@ class File {
 	public function put($path = NULL, $contents = NULL) {
 		$file = self::__instance($path, $contents);
 
+		if ("file" !== $file->itsUrl->scheme)
+			throw new ErrorException("Files can only be written to the local file system");
+
 		if (false === file_put_contents((string) $file->itsUrl, $file->itsContents))
 			throw new ErrorException("Couldn't write to " . (string) $file->itsUrl);
 		
