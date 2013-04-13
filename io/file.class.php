@@ -21,10 +21,15 @@ class File {
 	protected $itsContents;
 
 	public function __construct($path) {
-		if (false === strpos("://", $path))
-			$path = "file:///" . $path;
 
-		$url = URL::fromString($path);
+		if (!($path instanceof URL)) {
+			$path = (string) $path;
+
+			if (false === strpos("://", $path))
+				$path = "file:///" . $path;
+
+			$url = URL::fromString($path);
+		}
 		
 		if ("file" === $url->scheme && preg_match("#^[\.\\\\/]#", $url->path)) {
 			$caller = function() {
