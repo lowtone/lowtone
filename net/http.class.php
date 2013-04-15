@@ -1,6 +1,5 @@
 <?php
 namespace lowtone\net;
-use lowtone\types\arrays\XArray;
 
 /**
  * @author Paul van der Meijs <code@lowtone.nl>
@@ -32,7 +31,9 @@ class Http {
 				CURLOPT_URL => $url,
 				CURLOPT_POSTFIELDS => (array) $data,
 				CURLOPT_FOLLOWLOCATION => true
-			) + (array) $options + array(
+			) + 
+			(array) $options + 
+			array(
 				CURLOPT_RETURNTRANSFER => true
 			);
 
@@ -50,12 +51,16 @@ class Http {
 	}
 
 	public function __call($name, $arguments) {
-		switch (strtolower($name)) {
-			case "get":
-			case "put":
-			case "post":
-			case "delete":
-				return call_user_func_array(array($this, "request"), (array) XArray::create($arguments)->unshift($name));
+		switch (strtoupper($name)) {
+			case self::METHOD_GET:
+			case self::METHOD_PUT:
+			case self::METHOD_POST:
+			case self::METHOD_DELETE:
+				$arguments = (array) $arguments;
+
+				array_unshift($arguments, $name);
+
+				return call_user_func_array(array($this, "request"), $arguments);
 		}
 	}
 
