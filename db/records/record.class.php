@@ -20,8 +20,7 @@ abstract class Record extends Object {
 	/**
 	 * @var bool
 	 */
-	private $__readonly,
-		$__locked;
+	private $__readonly;
 
 	/**
 	 * @var array
@@ -50,7 +49,6 @@ abstract class Record extends Object {
 		OPTION_SELECT = "select",
 		OPTION_FROM = "from",
 		OPTION_READONLY = "readonly",
-		OPTION_LOCK = "lock",
 		OPTION_LOGICAL_OPERATOR = "logical_operator",
 		OPTION_RELATIONAL_OPERATOR = "relational_operator";
 
@@ -206,12 +204,6 @@ abstract class Record extends Object {
 		return $this;
 	}
 
-	public function setLocked($lock) {
-		$this->__locked = (bool) $lock;
-
-		return $this;
-	}
-
 	// Static
 	
 	public static function __createReflection() {
@@ -356,9 +348,8 @@ abstract class Record extends Object {
 	public static function create($properties = NULL, array $options = NULL) {
 		$object = parent::create($properties, $options);
 
-		$object
-			->setReadonly(@$options[self::OPTION_READONLY])
-			->setLocked(@$options[self::OPTION_LOCK]);
+		if (isset($options[self::OPTION_READONLY]) && $options[self::OPTION_READONLY])
+			$object->setReadonly($options[self::OPTION_READONLY]);
 
 		return $object;
 	}
