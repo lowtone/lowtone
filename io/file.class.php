@@ -1,7 +1,6 @@
 <?php
 namespace lowtone\io;
-use ErrorException,
-	lowtone\net\URL;
+use lowtone\net\URL;
 
 /**
  * @author Paul van der Meijs <code@lowtone.nl>
@@ -55,7 +54,7 @@ class File {
 		$file = self::__instance($path);
 
 		if (false === ($contents = file_get_contents((string) $file->itsUrl)))
-			throw new ErrorException("Couldn't read from " . (string) $file->itsUrl);
+			throw new exceptions\ReadException("Couldn't read from " . (string) $file->itsUrl);
 
 		$file->itsContents = $contents;
 
@@ -66,10 +65,10 @@ class File {
 		$file = self::__instance($path, $contents);
 
 		if ("file" !== $file->itsUrl->scheme)
-			throw new ErrorException("Files can only be written to the local file system");
+			throw new exceptions\WriteException("Files can only be written to the local file system");
 
 		if (false === file_put_contents((string) $file->itsUrl, $file->itsContents))
-			throw new ErrorException("Couldn't write to " . (string) $file->itsUrl);
+			throw new exceptions\WriteException("Couldn't write to " . (string) $file->itsUrl);
 		
 		return $file;
 	}
