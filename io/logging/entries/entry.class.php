@@ -18,7 +18,7 @@ class Entry extends Record {
 
 	public function __toString() {
 		return vsprintf(
-			"%s (%s) %s", 
+			"[%s] (%s) %s", 
 			array(
 				$this->__get(self::PROPERTY_TIMESTAMP), 
 				$this->__get(self::PROPERTY_DOMAIN), 
