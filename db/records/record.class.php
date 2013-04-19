@@ -300,7 +300,7 @@ abstract class Record extends Object {
 	// Definitions
 
 	public static function __getReflection() {
-		return (($reflection = @self::$__reflection[get_called_class()]) instanceof ReflectionClass) ? $reflection : static::__createReflection();
+		return (isset(self::$__reflection[$called = get_called_class()]) && ($reflection = self::$__reflection[$called]) instanceof ReflectionClass) ? $reflection : static::__createReflection();
 	}
 	
 	public static function __getVersion() {
@@ -308,7 +308,7 @@ abstract class Record extends Object {
 	}
 
 	public static function __getSchema() {
-		return (($schema = @self::$__schema[get_called_class()]) instanceof Schema) ? $schema : static::__createSchema();
+		return (isset(self::$__schema[$called = get_called_class()]) && ($schema = self::$__schema[$called]) instanceof Schema) ? $schema : static::__createSchema();
 	}
 
 	public static function __getDb() {
