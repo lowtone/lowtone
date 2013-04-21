@@ -17,7 +17,7 @@ class DateTimeZone extends Input {
 		$altValues = array();
 
 		foreach (DTZ::listIdentifiers() as $identifier) {
-			list($continent, $city, $subCity)  = explode("/", str_replace("_", " ", $identifier));
+			@list($continent, $city, $subCity)  = explode("/", str_replace("_", " ", $identifier));
 
 			$values[$continent][] = $identifier;
 			$altValues[$continent][] = implode(", ", array_filter(array($city, $subCity)));
