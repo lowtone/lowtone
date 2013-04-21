@@ -20,11 +20,20 @@ class String extends ArrayObject {
 
 		$pattern = "lower" == strtolower($type) ? "/_(.?)/e" : "/(?:^|_)(.?)/e";
 
-		return preg_replace($pattern, "strtoupper('$1')", (string) $string);
+		return new String(preg_replace($pattern, "strtoupper('$1')", (string) $string));
 	}
 
 	public function underscore($string = NULL) {
-		return strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", (string) self::__instance($string)));
+		return new String(strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", (string) self::__instance($string))));
+	}
+
+	public function __invoke($string = NULL) {
+		if (!isset($string))
+			return $this;
+
+		$this->exchangeArray($this->split($string));
+
+		return $this;
 	}
 
 	public function __toString() {
