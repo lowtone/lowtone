@@ -2,6 +2,7 @@
 namespace lowtone\db\records;
 use ReflectionClass,
 	lowtone\types\objects\Object,
+	lowtone\types\strings\String,
 	lowtone\db\DB,
 	lowtone\db\records\schemata\Schema,
 	lowtone\db\records\schemata\properties\Property;
@@ -546,6 +547,51 @@ abstract class Record extends Object {
 			$result = reset($result);
 
 		return $result;
+	}
+
+	/**
+	 * Search for a Record with the given property matching any of the given 
+	 * values.
+	 * @param string $property The property to search for.
+	 * @param string|array $value A single value or an array of values to match.
+	 * @param string|array $value,... Multiple values or arrays of values to 
+	 * match.
+	 * @return Record|Collection Returns a Collection of Record instances or 
+	 * a single Record instance if a single value was supplied for the $value 
+	 * parameter.
+	 */
+	public static function findBy($property, $value) {
+		global $wpdb;
+		
+		$values = array_unique(call_user_func_array('array_merge', array_map(function($param) {return (array) $param;}, array_slice((array) func_get_args(), 1))));
+
+		if (!$values)
+			return static::__createCollection(); // Returns empty Collection
+
+		$condition = sprintf("%s IN (%s)", self::__escapeIdentifier($property), implode(", ", array_map(function($val) {return Record::__escape($val);}, $values))); 
+		
+		$result = static::all(array(
+				self::OPTION_CONDITIONS => $condition
+			));
+
+		if (!is_array($value) && func_num_args() < 3)
+			$result = reset($result);
+
+		return $result;
+	}
+
+	public static function __callStatic($name, $arguments) {
+
+		// Find by everything
+		
+		if (preg_match("/findBy(.+)/", $name, $matches)) {
+			$property = (string) String::underscore($matches[1]);
+
+			array_unshift($arguments, $property);
+
+			return call_user_func_array(get_called_class() . "::findBy", $arguments);
+		}
+
 	}
 
 	public static function __getCollectionClass() {
