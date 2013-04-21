@@ -14,6 +14,26 @@ class String extends ArrayObject {
 	public function __construct($string) {
 		parent::__construct($this->split($string));
 	}
+
+	public function cammelcase($type = "upper") {
+		list($string, $type) = isset($this) && $this instanceof String ? array($this, $type) : func_get_args();
+
+		$pattern = "lower" == strtolower($type) ? "/_(.?)/e" : "/(?:^|_)(.?)/e";
+
+		return preg_replace($pattern, "strtoupper('$1')", (string) $string);
+	}
+
+	public function underscore($string = NULL) {
+		return strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", (string) self::__instance($string)));
+	}
+
+	public function __toString() {
+		return implode((array) $this);
+	}
+
+	protected function __instance($string = NULL) {
+		return isset($this) && $this instanceof String ? $this : new String($string);
+	}
 	
 	/**
 	 * Convert a string to an array with support for multi-byte strings.
@@ -29,7 +49,7 @@ class String extends ArrayObject {
 		if (!($encoding = mb_detect_encoding($string)))
 			$encoding = mb_internal_encoding();
 			
-		for ($result = array(), $i = 0; $i < self::length($string); $i += $length)
+		for ($result = array(), $i = 0; $i < mb_strlen($string, $encoding); $i += $length)
 			$result[] = mb_substr($string, $i, $length, $encoding);
 			
 		return $result;
