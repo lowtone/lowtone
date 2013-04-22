@@ -33,6 +33,8 @@ Creating a database table for a Record class can be done by calling `Record::__s
 Foo::__storageCreate();
 ```
 
+The name for the table is created from the class name and is prefixed with the prefix as defined in the WordPress configuration and pluralized by adding an "s" at the end. With the default prefix this would result in `wp_foos` for the above example. It is also possible to define a custom table name by overwriting `Record::__getTable()`.
+
 ## Insert record
 
 To store a new record in the database first a new instance of the class should be created. Then it can be stored by calling its `save()` method.
