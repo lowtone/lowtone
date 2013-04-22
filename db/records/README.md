@@ -1,6 +1,6 @@
 # Records
 
-The Lowtone Library for WordPress includes a simple ORM system designed specifically with WordPress in mind.
+The Lowtone Library for WordPress includes a simple [ORM](http://en.wikipedia.org/wiki/Object-relational_mapping) system designed specifically with WordPress in mind.
 
 ## Create a record class
 
@@ -19,7 +19,7 @@ class Foo extends Record {
 }
 ```
 
-The basic idea is that properties are defined using class constants. From those property definitions a schema is reverse-engineered when e.g. an instance of the class is created use `Record::__createSchema()` (a schema is only created once and is then stored for that specific class).
+The basic idea is that properties are defined using class constants. From those property definitions a schema is reverse-engineered when e.g. an instance of the class is created using `Record::__createSchema()` (a schema is only created once and is then stored for that specific class).
 
 By default `Record::__createSchema()` will try to figure out the property types by the names of the class constants. E.g. a constant name matching `TIMESTAMP`, `DATETIME`, `CHANGED`, or `CREATED` will be of the DateTime-type, where the `CHANGED` and `CREATED` properties will default to the current time, `DATE` and `TIME` properties will respectively be of the date and time-type and properties ending with `_ID` will be of the numeric type and the first occurrence of an `_ID` property will become the record's primary key.
 
@@ -62,6 +62,10 @@ $foo(array(
 ```
 
 Using automatically generated methods for property access also works but only for properties that are defined in the schema. Calling a method for a nonexistent property (like `$foo->bar("New value for bar")`) will throw an `ErrorException`.
+
+Another difference with the `Object` class is that getters and setters can be defined by the schema. A property of the DateTime-type will, for example, when a new value is assigned automatically try to convert it to a `lowtone\types\datetime\DateTime` object. This will happen regardless of how the property is accessed, either using the object as an array, as an object, or accessing the property using an automatically generated method.
+
+A full description for the use of `Object` instances can be found [here](https://github.com/lowtone/lowtone/tree/master/types/objects).
 
 ## Fetch records
 
