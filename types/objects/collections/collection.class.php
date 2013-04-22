@@ -27,6 +27,10 @@ class Collection extends XArray implements Documentable {
 		OPTION_LIMIT = "limit",
 		OPTION_OFFSET = "offset";
 
+	const SORT_PROPERTY = "property",
+		SORT_DIRECTION = "direction",
+		SORT_TYPE = "type";
+
 	public function offsetSet($index, $newval) {
 		$class = $this->getObjectClass();
 
@@ -187,22 +191,22 @@ class Collection extends XArray implements Documentable {
 
 			$options = array_map(function($option) {
 				return array_merge(array(
-						"direction" => "asc",
-						"type" => "numeric"
-					), is_array($option) ? $option : array("property" => $option));
+						self::SORT_DIRECTION => "asc",
+						self::SORT_TYPE => "numeric"
+					), is_array($option) ? $option : array(self::SORT_PROPERTY => $option));
 			}, (array) $options);
 
 			// Convert to callback
 
 			$options = function($a, $b) use ($options) {
 				foreach ($options as $option) {
-					if (NULL === ($property = $option["property"]))
+					if (NULL === ($property = $option[self::SORT_PROPERTY]))
 						continue;
 
 					$pA = $a[$property];
 					$pB = $b[$property];
 
-					switch ($option["type"]) {
+					switch ($option[self::SORT_TYPE]) {
 						case "natural":
 							list($pA, $pB) = 0 == ($strDiff = strcasecmp($pA, $pB)) ? array(0, 0) : ($strDiff < 0 ? array(0, 1) : array(1, 0));
 							break;
@@ -219,7 +223,7 @@ class Collection extends XArray implements Documentable {
 					
 					$diff = $pA < $pB ? -1 : 1;
 
-					if ("desc" == strtolower($option["direction"]))
+					if ("desc" == strtolower($option[self::SORT_DIRECTION]))
 						$diff *= -1;
 
 					return $diff;
