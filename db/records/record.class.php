@@ -104,6 +104,12 @@ abstract class Record extends Object {
 			$values[] = $this->applyFilters(@$this[$property], @$attributes[Property::ATTRIBUTE_SERIALIZE]);
 		}
 
+		if (NULL !== ($maxAllowedPacket = DB::maxAllowedPacket())) {
+
+			// Filter out long strings
+
+		}
+
 		$query[] = sprintf("REPLACE %s (%s)", self::__escapeIdentifier(static::__getTable()), implode(",", array_map(function($col) {return Record::__escapeIdentifier($col);}, $columns)));
 
 		$query[] = sprintf("VALUES (%s)", implode(",", array_map(function($value) use ($wpdb) {
