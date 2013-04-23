@@ -167,4 +167,8 @@ class Form extends base\FormElement {
 		return __NAMESPACE__ . "\\out\\FormDocument";
 	}
 	
+	public static function create(array $properties = NULL, array $options = NULL) {
+		return new static($properties, $options);
+	}
+	
 }
