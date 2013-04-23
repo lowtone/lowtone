@@ -53,7 +53,7 @@ class File {
 	public function get($path = NULL) {
 		$file = self::__instance($path);
 
-		if (false === ($contents = file_get_contents((string) $file->itsUrl)))
+		if (false === ($contents = @file_get_contents((string) $file->itsUrl)))
 			throw new exceptions\ReadException("Couldn't read from " . (string) $file->itsUrl);
 
 		$file->itsContents = $contents;
