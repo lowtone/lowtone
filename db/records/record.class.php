@@ -90,37 +90,82 @@ abstract class Record extends Object {
 		}
 
 		if ($defaults) 
-			$this(@$options[self::OPTION_OVERWRITE_WITH_DEFAULTS] ? $defaults : array_diff_key((array) $defaults, (array) $object));
+			$this(isset($options[self::OPTION_OVERWRITE_WITH_DEFAULTS]) && $options[self::OPTION_OVERWRITE_WITH_DEFAULTS] ? $defaults : array_diff_key((array) $defaults, (array) $object));
 
 		global $wpdb;
 
+		$query = "REPLACE %s (%s) VALUES (%s)";
+
+		$size = strlen($query);
+
+		$maxAllowedPacket = DB::maxAllowedPacket();
+
 		$schema = $this->__getSchema();
 
-		$columns = array();
 		$values = array();
 
+		$appendValues = array();
+
 		foreach ((array) $schema as $property => $attributes) {
-			$columns[] = $property;
-			$values[] = $this->applyFilters(@$this[$property], @$attributes[Property::ATTRIBUTE_SERIALIZE]);
+			$column = self::__escapeIdentifier($property);
+
+			$size += 1 + strlen($column);
+
+			$value = isset($this[$property]) ? $this[$property] : NULL;
+
+			if (NULL !== $value){
+				if (isset($attributes[Property::ATTRIBUTE_SERIALIZE]))
+					$value = $this->applyFilters($value, $attributes[Property::ATTRIBUTE_SERIALIZE]);
+
+				$value = self::__escape($value);
+			} else 
+				$value = "NULL";
+
+			if (NULL === $maxAllowedPacket || ($size + ($valueSize = 1 + strlen($value))) < $maxAllowedPacket) {
+				$values[$column] = $value;
+
+				$size += $valueSize;
+			} else 
+				$appendValues[$column] = $value;
+
 		}
 
-		if (NULL !== ($maxAllowedPacket = DB::maxAllowedPacket())) {
+		$table = self::__escapeIdentifier(static::__getTable());
 
-			// Filter out long strings
+		$query = sprintf($query, $table, implode(",", array_keys($values)), implode(",", $values));
 
+		if (false === $wpdb->query($query)) 
+			throw new exceptions\SaveException(sprintf("Failed saving object of class '%s' (MySQL error: %s)", get_called_class(), mysql_error()));
+
+		if ($appendValues) {
+			$pkColumn = self::__escapeIdentifier(reset($schema->getPrimaryKeys()));
+			$pkValue = self::__escape($wpdb->insert_id);
+
+			$appendQuery = sprintf("UPDATE %s SET %%s=%%s WHERE %s=%s", $table, $pkColumn, $pkValue);
+
+			$appendBaseSize = strlen($appendQuery);
+
+			$maxChunkSize = round(.8 * $maxAllowedPacket);
+
+			foreach ($appendValues as $column => $value) {
+				$appendSize = $appendBaseSize + (strlen($column) * 2) + 11; // 11 = CONCAT(,'')
+
+				$chunkSize = $maxChunkSize - $appendSize;
+
+				for ($chunks = str_split($value, $chunkSize), $i = 0; list(, $chunk) = each($chunks); $i++) {
+					$chunkVal = self::__escape($chunk);
+
+					if ($i > 0) 
+						$chunkVal = sprintf("CONCAT(%s,%s)", $column, $chunkVal);
+
+					$chunkQuery = sprintf($appendQuery, $column, $chunkVal);
+
+					if (false === $wpdb->query($chunkQuery)) 
+						throw new exceptions\SaveException(sprintf("Failed appending chunk for '%s' (MySQL error: %s)", get_called_class(), mysql_error()));
+
+				}
+			}
 		}
-
-		$query[] = sprintf("REPLACE %s (%s)", self::__escapeIdentifier(static::__getTable()), implode(",", array_map(function($col) {return Record::__escapeIdentifier($col);}, $columns)));
-
-		$query[] = sprintf("VALUES (%s)", implode(",", array_map(function($value) use ($wpdb) {
-			if (is_null($value))
-				return "NULL";
-
-			return $wpdb->prepare("%s", $value);
-		}, $values)));
-		
-		if ($wpdb->query(implode(" ", $query)) === false) 
-			trigger_error(sprintf("Failed saving object of class '%s' (MySQL error: %s)", get_called_class(), mysql_error()), E_USER_WARNING);
 		
 		return $this;
 	}
@@ -138,7 +183,7 @@ abstract class Record extends Object {
 	// Util
 
 	public function __escape($val) {
-		return self::__getDb()->quote($val);
+		return $GLOBALS["wpdb"]->prepare("%s", $val); //self::__getDb()->quote($val);
 	}
 
 	public function __escapeIdentifier($val) {
