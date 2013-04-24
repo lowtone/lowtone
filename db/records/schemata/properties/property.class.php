@@ -14,8 +14,9 @@ class Property extends Object {
 	const ATTRIBUTE_NAME = "name",
 		ATTRIBUTE_TYPE = "type",
 		ATTRIBUTE_LENGTH = "length",
-		ATTRIBUTE_NULL = "null",
-		ATTRIBUTE_AUTO_INCREMENT = "auto_increment",
+		// ATTRIBUTE_NULL = "null",
+		// ATTRIBUTE_AUTO_INCREMENT = "auto_increment",
+		ATTRIBUTE_COLUMN_ATTRIBUTES = "column_attributes",
 		ATTRIBUTE_DEFAULT_VALUE = "default_value",
 		ATTRIBUTE_ON_UPDATE = "on_update",
 		ATTRIBUTE_INDEXES = "indexes",
@@ -23,8 +24,6 @@ class Property extends Object {
 		ATTRIBUTE_SET = "set",
 		ATTRIBUTE_SERIALIZE = "serialize",
 		ATTRIBUTE_UNSERIALIZE = "unserialize";
-
-	const ATTRIBUTE_COLUMN_DEFINITION = "column_definition";
 
 	const TYPE_INT = "int",
 		TYPE_STRING = "string",

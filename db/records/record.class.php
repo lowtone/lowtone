@@ -130,7 +130,25 @@ abstract class Record extends Object {
 	// Delete
 
 	public function delete() {
+		if (!($primaryKeys = $this->__getSchema()->getPrimaryKeys()))
+			throw new exceptions\DeleteException(sprintf("Cannot delete entry for class '%s' without primary key", get_called_class()));
 
+		if ($this->__readonly) 
+			throw new exceptions\ReadOnlyException("Cannot delete read-only object");
+
+		$conditions = new queries\conditions\Condition();
+
+		foreach ($primaryKeys as $key) 
+			$conditions[$key] = isset($this[$key]) ? $this[$key] : NULL;
+
+		$query = sprintf("DELETE FROM %s WHERE %s", self::__escapeIdentifier(static::__getTable()), $conditions);
+
+		global $wpdb;
+
+		if (false === $wpdb->query($query)) 
+			throw new exceptions\DeleteException(sprintf("Failed deleting object of class '%s' (MySQL error: %s)", get_called_class(), mysql_error()));
+
+		return $this;
 	}
 
 	// Util
@@ -232,19 +250,7 @@ abstract class Record extends Object {
 
 		for ($schema = static::__getSchema(), $definitions = array(); list($property, $attributes) = each($schema);) {
 			$type = strtolower($attributes[Property::ATTRIBUTE_TYPE]) ?: Property::TYPE_STRING;
-
-			if ($primaryKey = in_array($property, $schema->getPrimaryKeys())) {
-
-				switch ($type) {
-					case Property::TYPE_INT:
-						$attributes = array_merge(array(
-								Property::ATTRIBUTE_COLUMN_DEFINITION => "NOT NULL AUTO_INCREMENT"
-							), (array) $attributes);
-						break;
-
-				}
-
-			}
+			$primaryKey = in_array($property, $schema->getPrimaryKeys());
 
 			$definition = self::__escapeIdentifier($property);
 
@@ -268,8 +274,38 @@ abstract class Record extends Object {
 					break;
 			}
 
-			if (!@$attributes[Property::ATTRIBUTE_COLUMN_DEFINITION])
+			// Column attributes
+
+			if (!isset($attributes[Property::ATTRIBUTE_COLUMN_ATTRIBUTES])) {
 				$definition .= " NOT NULL";
+
+				if (isset($attributes[Property::ATTRIBUTE_DEFAULT_VALUE])) {
+					$defaultValue = $attributes[Property::ATTRIBUTE_DEFAULT_VALUE];
+
+					if (is_callable($defaultValue))
+						$defaultValue = call_user_func($defaultValue);
+
+					$definition .= " DEFAULT " . self::__escape($defaultValue);
+				}
+
+				if (isset($attributes[Property::ATTRIBUTE_ON_UPDATE])) {
+					$onUpdate = $attributes[Property::ATTRIBUTE_ON_UPDATE];
+
+					if (is_callable($onUpdate))
+						$onUpdate = call_user_func($onUpdate);
+
+					$definition .= " ON UPDATE " . self::__escape($onUpdate);
+				}
+
+				if ($primaryKey) {
+					if (Property::TYPE_INT == $type)
+						$definition .= " AUTO_INCREMENT";
+
+					// $definition .= " PRIMARY KEY";
+				}
+
+			} else 
+				$definition .= $attributes[Property::ATTRIBUTE_COLUMN_ATTRIBUTES];
 
 			$definitions[] = $definition;
 		}

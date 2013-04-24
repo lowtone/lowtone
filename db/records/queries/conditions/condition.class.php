@@ -1,9 +1,10 @@
 <?php
 namespace lowtone\db\records\queries\conditions;
-use lowtone\db\records\Record,
+use ArrayAccess,
+	lowtone\db\records\Record,
 	lowtone\db\records\queries\expressions\Expression;
 
-class Condition {
+class Condition implements ArrayAccess {
 
 	protected $itsConditions;
 
@@ -13,8 +14,8 @@ class Condition {
 	const OPTION_LOGICAL_OPERATOR = "logical_operator",
 		OPTION_RELATIONAL_OPERATOR = "relational_operator";
 
-	public function __construct($conditions, $options = NULL) {
-		$this->itsConditions = $conditions;
+	public function __construct($conditions = NULL, $options = NULL) {
+		$this->itsConditions = (array) $conditions;
 
 		if (isset($options[self::OPTION_LOGICAL_OPERATOR]))
 			$this->itsLogicalOperator = $options[self::OPTION_LOGICAL_OPERATOR];
@@ -22,6 +23,25 @@ class Condition {
 		if (isset($options[self::OPTION_RELATIONAL_OPERATOR]))
 			$this->itsRelationalOperator = $options[self::OPTION_RELATIONAL_OPERATOR];
 
+	}
+
+	public function offsetSet($offset, $value) {
+		if (is_null($offset)) 
+			$this->itsConditions[] = $value;
+		else 
+			$this->itsConditions[$offset] = $value;
+	}
+
+	public function offsetExists($offset) {
+		return isset($this->itsConditions[$offset]);
+	}
+		
+	public function offsetUnset($offset) {
+		unset($this->itsConditions[$offset]);
+	}
+	
+	public function offsetGet($offset) {
+		return isset($this->itsConditions[$offset]) ? $this->itsConditions[$offset] : null;
 	}
 
 	public function __toString() {
@@ -33,13 +53,39 @@ class Condition {
 			if ($value instanceof Condition)
 				return "({$value})";
 
+			// Key
+
 			if (!($key instanceof Expression))
 				$key = Record::__escapeIdentifier($key);
 
-			if (!($value instanceof Expression))
-				$value = Record::__escape($value);
+			// Value
+			
+			$operator = $condition->logicalOperator();
 
-			return $key . " " . $condition->logicalOperator() . " " . $value;
+			if (!($value instanceof Expression)) {
+
+				if (NULL === $value) {
+					$value = "NULL";
+
+					switch ($operator) {
+						case "=":
+							$operator = "IS";
+							break;
+
+						case "!=":
+						case "<>":
+						case ">":
+						case "<":
+							$operator = "IS NOT";
+							break;
+					}
+
+				} else
+					$value = Record::__escape($value);
+
+			}
+
+			return $key . " " . $operator . " " . $value;
 		}, array_keys($conditions), $conditions));
 	}
 

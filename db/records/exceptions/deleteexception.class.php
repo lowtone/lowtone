@@ -8,6 +8,6 @@ namespace lowtone\db\records\exceptions;
  * @version 1.0
  * @package wordpress\libs\lowtone\db\records\exceptions
  */
-class SaveException extends RecordException {
+class DeleteException extends RecordException {
 	
 }

@@ -1,6 +1,7 @@
 <?php
 namespace lowtone\db\records\schemata;
-use lowtone\types\arrays\XArray,
+use ReflectionClass,
+	lowtone\types\arrays\XArray,
 	lowtone\types\datetime\DateTime,
 	lowtone\types\objects\Object,
 	lowtone\db\records\schemata\properties\Property;
@@ -16,33 +17,17 @@ class Schema extends Object {
 
 	protected $__itsRecordClass;
 
-	public function mergeSchemata() {
-		$schemata = func_get_args();
-
-		if (isset($this) && $this instanceof Schema)
-			array_unshift($schemata, $this);
-
-		$schema = array();
-
-		foreach ($schemata as $overwrite) {
-
-			foreach ((array) $overwrite as $property => $attributes) 
-				$schema[$property] = array_merge((array) @$schema[$property], (array) $attributes);
-
-		}
-
-		return new Schema($schema);
-	}
-
 	public function hasProperty($name) {
-		return array_key_exists($name, (array) $this);
+		return isset($this[$name]);
 	}
 
 	// Getters
 	
 	public function getPrimaryKeys() {
 		return array_keys(array_filter((array) $this, function($property) {
-			return in_array(Property::INDEX_PRIMARY_KEY, (array) @$property[Property::ATTRIBUTE_INDEXES]);
+			$indexes = isset($property[Property::ATTRIBUTE_INDEXES]) ? (array) $property[Property::ATTRIBUTE_INDEXES] : array();
+
+			return in_array(Property::INDEX_PRIMARY_KEY, $indexes);
 		}));
 	}
 
@@ -93,7 +78,7 @@ class Schema extends Object {
 			return $value;
 		}, (array) $this);
 
-		if ($property)
+		if (isset($property))
 			return isset($attributes[$property]) ? $attributes[$property] : NULL;
 
 		return $attributes;
@@ -121,37 +106,33 @@ class Schema extends Object {
 	}
 
 	/**
-	 * Create a Schema object from a r
-	 * @param  [type] $rc [description]
-	 * @return [type]     [description]
+	 * Create a Schema object from a ReflectionClass instance.
+	 * @param ReflectionClass $rc The ReflectionClass instance to reverse 
+	 * engineer a schema from.
+	 * @param array|NULL $defaults Default property definitions.
+	 * @return Schema Returns a Schema instance on success.
 	 */
-	public static function fromReflection($rc, $defaults = NULL) {
+	public static function fromReflection(ReflectionClass $rc, $defaults = NULL) {
 		$properties = XArray::filterKeys(function($const) {
 			return preg_match("/^PROPERTY_/i", $const);
 		}, $rc->getConstants());
+
+		$defaults = array_merge(array_fill_keys((array) $properties, NULL), (array) $defaults);
 
 		$schema = new Schema($defaults);
 
 		$schema->setRecordClass(get_called_class());
 
-		$createConvertToDateTime = function($defaultFormat) {
-			return function($val) use ($defaultFormat) {
-				if (is_numeric($val)) $val = "@" . $val;
-				return DateTime::createFromString($val)
-					->setDefaultFormat($defaultFormat);
-			};
-		};
-
 		foreach ($properties as $property) {
-			$attributes = array();
+			if (isset($schema[$property]))
+				continue;
 
 			// Id
 
 			if (preg_match("/[^[:alpha:]]id$/i", $property)) {
-				$attributes = array(
-					Property::ATTRIBUTE_TYPE => Property::TYPE_INT,
-					Property::ATTRIBUTE_LENGTH => 20 // BIGINT
-				);
+				$attributes = new properties\types\Int(array(
+					Property::ATTRIBUTE_LENGTH => properties\types\Int::LENGTH_BIG // BIGINT
+				));
 
 				if (!$schema->getPrimaryKeys()) 
 					$attributes[Property::ATTRIBUTE_INDEXES] = array(Property::INDEX_PRIMARY_KEY);
@@ -163,30 +144,15 @@ class Schema extends Object {
 			else if (preg_match("/timestamp|datetime|date|time|created|changed/i", $property, $matches)) {
 				switch ($matches[0]) {
 					case "date":
-						$attributes = array(
-							Property::ATTRIBUTE_TYPE => Property::TYPE_DATE,
-							Property::ATTRIBUTE_SET => $createConvertToDateTime("Y-m-d"),
-							Property::ATTRIBUTE_UNSERIALIZE => $createConvertToDateTime("Y-m-d"),
-							Property::ATTRIBUTE_DEFAULT_VALUE => "0000-00-00"
-						);
+						$attributes = new properties\types\Date();
 						break;
 
 					case "time":
-						$attributes = array(
-							Property::ATTRIBUTE_TYPE => Property::TYPE_TIME,
-							Property::ATTRIBUTE_SET => $createConvertToDateTime("H:i:s"),
-							Property::ATTRIBUTE_UNSERIALIZE => $createConvertToDateTime("H:i:s"),
-							Property::ATTRIBUTE_DEFAULT_VALUE => "00:00:00"
-						);
+						$attributes = new properties\types\Time();
 						break;
 
 					default:
-						$attributes = array(
-							Property::ATTRIBUTE_TYPE => Property::TYPE_DATETIME,
-							Property::ATTRIBUTE_SET => $createConvertToDateTime("Y-m-d H:i:s"),
-							Property::ATTRIBUTE_UNSERIALIZE => $createConvertToDateTime("Y-m-d H:i:s"),
-							Property::ATTRIBUTE_DEFAULT_VALUE => "0000-00-00 00:00:00"
-						);
+						$attributes = new properties\types\DateTime();
 
 						switch ($matches[0]) {
 							case "created":
@@ -208,16 +174,38 @@ class Schema extends Object {
 			// Default
 
 			else {
-				$attributes = array(
-					Property::ATTRIBUTE_TYPE => Property::TYPE_STRING,
-					Property::ATTRIBUTE_LENGTH => 65535 // TEXT
-				);
+				$attributes = new properties\types\String(array(
+					Property::ATTRIBUTE_LENGTH => properties\types\String::LENGTH_DEFAULT // TEXT
+				));
 			}
 
-			$schema[$property] = array_merge($attributes, (array) @$schema[$property]);
+			$schema[$property] = $attributes;
 		}
 
 		return $schema;
 	}
 
+	// Deprecated
+
+	/**
+	 * @deprecated Too complex.
+	 * @return [type] [description]
+	 */
+	public function mergeSchemata() {
+		$schemata = func_get_args();
+
+		if (isset($this) && $this instanceof Schema)
+			array_unshift($schemata, $this);
+
+		$schema = array();
+
+		foreach ($schemata as $overwrite) {
+
+			foreach ((array) $overwrite as $property => $attributes) 
+				$schema[$property] = array_merge((array) @$schema[$property], (array) $attributes);
+
+		}
+
+		return new Schema($schema);
+	}
 }

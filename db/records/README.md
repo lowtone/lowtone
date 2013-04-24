@@ -97,7 +97,7 @@ To retrieve records that match a specific primary key `Record::findById()` shoul
 $foo = Foo::findById(1);
 ```
 
-The above example returns a single `Foo` instance with a primary key matching `1` or FALSE if such a record can't be found.
+The above example returns a single `Foo` instance with a primary key matching `1` or `FALSE` if such a record can't be found.
 
 `Record::findById()` could also be used to retrieve a collection of multiple records. A `Collection` instance will be returned when either multiple parameters for ID values are supplied, the ID value or values are supplied using an array, or a combination of those.
 
