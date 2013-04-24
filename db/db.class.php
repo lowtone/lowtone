@@ -12,6 +12,10 @@ use PDO,
  */
 class DB extends PDO {
 
+	public static function maxAllowedPacket() {
+		return defined("MYSQL_MAX_ALLOWED_PACKET") ? MYSQL_MAX_ALLOWED_PACKET : NULL;
+	}
+
 	public static function createDsn(array $settings = NULL) {
 		if (isset($settings["alias"])) 
 			return $settings["alias"];
