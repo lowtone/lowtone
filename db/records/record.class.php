@@ -4,6 +4,7 @@ use ReflectionClass,
 	lowtone\types\objects\Object,
 	lowtone\types\strings\String,
 	lowtone\db\DB,
+	lowtone\db\records\exceptions\RecordException,
 	lowtone\db\records\schemata\Schema,
 	lowtone\db\records\schemata\properties\Property;
 
@@ -76,40 +77,28 @@ abstract class Record extends Object {
 
 	/**
 	 * Insert or update the object instance in the database.
-	 * @throws Exception Throws an exception if the object is read-only.
+	 * @throws RecordException Throws an exception if the object is read-only.
 	 * @return Record Returns the object.
 	 */
 	public function save($defaults = NULL, $options = NULL) {
 		if (!(isset($this) && $this instanceof Record))
-			return static::create($defaults)->save();
+			return static::create($defaults)->save(NULL, $options);
 
-		if ($this->__readonly) {
-			trigger_error("Cannot save read-only object", E_USER_NOTICE);
-
-			return $this;
-		}
+		if ($this->__readonly) 
+			throw new exceptions\ReadOnlyException("Cannot save read-only object");
 
 		if ($defaults) 
 			$this(isset($options[self::OPTION_OVERWRITE_WITH_DEFAULTS]) && $options[self::OPTION_OVERWRITE_WITH_DEFAULTS] ? $defaults : array_diff_key((array) $defaults, (array) $object));
 
 		global $wpdb;
 
-		$query = "REPLACE %s (%s) VALUES (%s)";
-
-		$size = strlen($query);
-
-		$maxAllowedPacket = DB::maxAllowedPacket();
-
 		$schema = $this->__getSchema();
 
+		$columns = array();
 		$values = array();
 
-		$appendValues = array();
-
 		foreach ((array) $schema as $property => $attributes) {
-			$column = self::__escapeIdentifier($property);
-
-			$size += 1 + strlen($column);
+			$columns[] = self::__escapeIdentifier($property);;
 
 			$value = isset($this[$property]) ? $this[$property] : NULL;
 
@@ -121,51 +110,15 @@ abstract class Record extends Object {
 			} else 
 				$value = "NULL";
 
-			if (NULL === $maxAllowedPacket || ($size + ($valueSize = 1 + strlen($value))) < $maxAllowedPacket) {
-				$values[$column] = $value;
-
-				$size += $valueSize;
-			} else 
-				$appendValues[$column] = $value;
-
+			$values[] = $value;
 		}
 
 		$table = self::__escapeIdentifier(static::__getTable());
 
-		$query = sprintf($query, $table, implode(",", array_keys($values)), implode(",", $values));
+		$query = sprintf("REPLACE %s (%s) VALUES (%s)", $table, implode(",", $columns), implode(",", $values));
 
 		if (false === $wpdb->query($query)) 
 			throw new exceptions\SaveException(sprintf("Failed saving object of class '%s' (MySQL error: %s)", get_called_class(), mysql_error()));
-
-		if ($appendValues) {
-			$pkColumn = self::__escapeIdentifier(reset($schema->getPrimaryKeys()));
-			$pkValue = self::__escape($wpdb->insert_id);
-
-			$appendQuery = sprintf("UPDATE %s SET %%s=%%s WHERE %s=%s", $table, $pkColumn, $pkValue);
-
-			$appendBaseSize = strlen($appendQuery);
-
-			$maxChunkSize = round(.8 * $maxAllowedPacket);
-
-			foreach ($appendValues as $column => $value) {
-				$appendSize = $appendBaseSize + (strlen($column) * 2) + 11; // 11 = CONCAT(,'')
-
-				$chunkSize = $maxChunkSize - $appendSize;
-
-				for ($chunks = str_split($value, $chunkSize), $i = 0; list(, $chunk) = each($chunks); $i++) {
-					$chunkVal = self::__escape($chunk);
-
-					if ($i > 0) 
-						$chunkVal = sprintf("CONCAT(%s,%s)", $column, $chunkVal);
-
-					$chunkQuery = sprintf($appendQuery, $column, $chunkVal);
-
-					if (false === $wpdb->query($chunkQuery)) 
-						throw new exceptions\SaveException(sprintf("Failed appending chunk for '%s' (MySQL error: %s)", get_called_class(), mysql_error()));
-
-				}
-			}
-		}
 		
 		return $this;
 	}
@@ -193,7 +146,7 @@ abstract class Record extends Object {
 	// Property access
 	
 	public function offsetGet($index) {
-		$value = @parent::offsetGet($index);
+		$value = isset($this[$index]) ? parent::offsetGet($index) : NULL;
 
 		// Apply getters
 		
@@ -203,11 +156,8 @@ abstract class Record extends Object {
 	}
 
 	public function offsetSet($index, $newval) {
-		if ($this->__readonly) {
-			trigger_error("Cannot set value for read-only object", E_USER_NOTICE);
-
-			return;
-		}
+		if ($this->__readonly) 
+			throw new exceptions\ReadOnlyException("Cannot set value for read-only object");
 
 		// Apply setters
 
@@ -217,18 +167,15 @@ abstract class Record extends Object {
 	}
 
 	public function offsetUnset($index) {
-		if ($this->__readonly) {
-			trigger_error("Cannot unset value for read-only object", E_USER_NOTICE);
-
-			return;
-		}
+		if ($this->__readonly) 
+			throw new exceptions\ReadOnlyException("Cannot unset value for read-only object");
 
 		parent::offsetUnset($index);
 	}
 
 	public function __call($name, $arguments) {
 		if (!$this->__getSchema()->hasProperty($name)) 
-			throw new \ErrorException(sprintf("Call to undefined function %s", get_called_class() . "::" . $name . "()"));
+			throw new exceptions\RecordException(sprintf("Call to undefined function %s", get_called_class() . "::" . $name . "()"));
 
 		return parent::__call($name, $arguments);
 	}
@@ -321,7 +268,7 @@ abstract class Record extends Object {
 					break;
 			}
 
-			if (!@$attributes[Property::COLUMN_DEFINITION])
+			if (!@$attributes[Property::ATTRIBUTE_COLUMN_DEFINITION])
 				$definition .= " NOT NULL";
 
 			$definitions[] = $definition;
@@ -427,7 +374,10 @@ abstract class Record extends Object {
 			$result = (array) $result;
 
 			$result = array_combine(($keys = array_keys($result)), array_map(function($value, $key) use ($unserializers) {
-				return Record::applyFilters($value, @$unserializers[$key]);
+				if (isset($unserializers[$key]))
+					$value = Record::applyFilters($value, $unserializers[$key]);
+
+				return $value;
 			}, $result, $keys));
 			
 			$objects[] = static::create($result, $options);

@@ -24,6 +24,8 @@ class Property extends Object {
 		ATTRIBUTE_SERIALIZE = "serialize",
 		ATTRIBUTE_UNSERIALIZE = "unserialize";
 
+	const ATTRIBUTE_COLUMN_DEFINITION = "column_definition";
+
 	const TYPE_INT = "int",
 		TYPE_STRING = "string",
 		TYPE_DATETIME = "datetime",

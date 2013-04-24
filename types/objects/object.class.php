@@ -17,7 +17,7 @@ class Object extends XArray implements Documentable {
 	// Property access
 
 	public function __get($name) {
-		return @$this[$name];
+		return isset($this[$name]) ? $this[$name] : NULL;
 	}
 
 	public function __set($name, $value) {
@@ -62,7 +62,10 @@ class Object extends XArray implements Documentable {
 		$object = $this; // Object::applyFilters() needs to be called from object context to provide the object as a parameter.
 		
 		return array_combine($keys, array_map(function($property, $key) use ($filters, $args, $object) {
-			return $object->applyFilters($property, @$filters[$key], $args);
+			if (isset($filters[$key]))
+				$property = $object->applyFilters($property, $filters[$key], $args);
+
+			return $property;
 		}, $properties, $keys));
 	}
 
@@ -76,7 +79,7 @@ class Object extends XArray implements Documentable {
 	public function applyFilters($value, $filters, array $args = NULL) {
 		$basicArgs = isset($this) && $this instanceof Object ? array(&$value, $this) : array(&$value);
 		$args = array_merge($basicArgs, (array) $args);
-
+		
 		if (is_callable($filters)) 
 			$filters = array($filters);
 
@@ -148,7 +151,7 @@ class Object extends XArray implements Documentable {
 	 * @return Object Returns a new Object instance.
 	 */
 	public static function create($properties = NULL, array $options = NULL) {
-		$class = @$options[self::OPTION_CLASS] ?: get_called_class();
+		$class = isset($options[self::OPTION_CLASS]) ? $options[self::OPTION_CLASS] : get_called_class();
 
 		return new $class($properties);
 	}

@@ -85,7 +85,7 @@ class Schema extends Object {
 	 */
 	private function getAttribute($attribute, $property = NULL, $callback = NULL) {
 		$attributes = array_map(function($attributes) use ($attribute, $callback) {
-			$value = @$attributes[$attribute];
+			$value = isset($attributes[$attribute]) ? $attributes[$attribute] : NULL;
 
 			if (is_callable($callback))
 				$value = call_user_func($callback, $value);
@@ -94,7 +94,7 @@ class Schema extends Object {
 		}, (array) $this);
 
 		if ($property)
-			return @$attributes[$property];
+			return isset($attributes[$property]) ? $attributes[$property] : NULL;
 
 		return $attributes;
 	}
