@@ -8,8 +8,8 @@ class Condition implements ArrayAccess {
 
 	protected $itsConditions;
 
-	protected $itsLogicalOperator = "=",
-		$itsRelationalOperator = "AND";
+	protected $itsLogicalOperator = "AND",
+		$itsRelationalOperator = "=";
 
 	const OPTION_LOGICAL_OPERATOR = "logical_operator",
 		OPTION_RELATIONAL_OPERATOR = "relational_operator";
@@ -49,7 +49,7 @@ class Condition implements ArrayAccess {
 
 		$conditions = (array) $this->itsConditions;
 
-		return (string) implode(" {$this->itsRelationalOperator} ", array_map(function($key, $value) use ($condition) {
+		return (string) implode(" {$this->itsLogicalOperator} ", array_map(function($key, $value) use ($condition) {
 			if ($value instanceof Condition)
 				return "({$value})";
 
@@ -60,7 +60,7 @@ class Condition implements ArrayAccess {
 
 			// Value
 			
-			$operator = $condition->logicalOperator();
+			$operator = $condition->relationalOperator();
 
 			if (!($value instanceof Expression)) {
 
