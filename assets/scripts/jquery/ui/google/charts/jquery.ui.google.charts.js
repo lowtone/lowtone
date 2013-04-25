@@ -12,7 +12,6 @@
       duration: 1000
     },
     hAxis: {
-      title: 'Date',
       titleTextStyle: {
         color: '#21759b'
       }
