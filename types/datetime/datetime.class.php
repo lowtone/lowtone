@@ -64,6 +64,64 @@ class DateTime extends Base {
 	public function sameDay(DateTime $compare) {
 		return $this->format("Y") == $compare->format("Y") && $this->format("z") == $compare->format("z");
 	}
+
+	// Interface functions
+
+	public function year($year = NULL) {
+		if (!isset($year))
+			return $this->year;
+
+		$this->setDate($year, $this->month, $this->day);
+
+		return $this;
+	}
+
+	public function month($month = NULL) {
+		if (!isset($month))
+			return $this->month;
+
+		$this->setDate($this->year, $month, $this->day);
+
+		return $this;
+	}
+
+	public function day($day = NULL) {
+		if (!isset($day))
+			return $this->day;
+
+		$this->setDate($this->year, $this->month, $day);
+
+		return $this;
+	}
+
+	public function hours($hours = NULL) {
+		if (!isset($hours))
+			return $this->hours;
+
+		$this->setTime($hours, $this->minutes, $this->seconds);
+
+		return $this;
+	}
+
+	public function minutes($minutes = NULL) {
+		if (!isset($minutes))
+			return $this->minutes;
+
+		$this->setTime($this->hours, $minutes, $this->seconds);
+
+		return $this;
+	}
+
+	public function seconds($seconds = NULL) {
+		if (!isset($seconds))
+			return $this->seconds;
+
+		$this->setTime($this->hours, $this->minutes, $seconds);
+
+		return $this;
+	}
+
+	// Magic
 	
 	public function __toString() {
 		return $this->format($this->itsDefaultFormat);
