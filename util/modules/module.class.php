@@ -43,4 +43,20 @@ abstract class Module extends Object {
 		});
 	}
 
+	public static final function instance($class) {
+		if (!class_exists($class))
+			throw new \ErrorException(sprintf("Class '%s' doesn't exist", $class));
+
+		$args = array_slice(func_get_args(), 2);
+		
+		$reflection = new \ReflectionClass($class);
+
+		$module = $reflection->newInstanceArgs($args);
+
+		if (!($module instanceof static))
+			throw new \ErrorException(sprintf("Requested module not instance of '%s'", __CLASS__));
+
+		return $module;
+	}
+
 }
