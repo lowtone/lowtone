@@ -5,6 +5,7 @@ use ReflectionClass,
 	lowtone\types\strings\String,
 	lowtone\db\DB,
 	lowtone\db\records\exceptions\RecordException,
+	lowtone\db\records\queries\conditions\Condition,
 	lowtone\db\records\schemata\Schema,
 	lowtone\db\records\schemata\properties\Property;
 
@@ -452,32 +453,42 @@ abstract class Record extends Object {
 
 		$query[] = sprintf("SELECT %s FROM %s", $options[self::OPTION_SELECT], self::__escapeIdentifier($options[self::OPTION_FROM]));
 
-		if ($joins = @$options[self::OPTION_JOINS]) {
+		if (isset($options[self::OPTION_JOINS])) {
+			$joins = $options[self::OPTION_JOINS];
 
 			foreach ((array) $joins as $join) 
 				$query[] = "LEFT JOIN " . $join;
 
 		}
 
-		if ($conditions = @$options[self::OPTION_CONDITIONS]) {
+		if (isset($options[self::OPTION_CONDITIONS])) {
+			$conditions = $options[self::OPTION_CONDITIONS];
 
-			if (is_array($conditions)) {
+			$conditionOptions = array(
+					Condition::OPTION_LOGICAL_OPERATOR => $options[self::OPTION_LOGICAL_OPERATOR],
+					Condition::OPTION_RELATIONAL_OPERATOR => $options[self::OPTION_RELATIONAL_OPERATOR]
+				);
 
-				$conditions = implode(" " . @$options[self::OPTION_LOGICAL_OPERATOR] . " ", array_map(function($value, $key) use ($wpdb, $options) {
-					return $wpdb->prepare(Record::__escapeIdentifier($key) . @$options[Record::OPTION_RELATIONAL_OPERATOR]  . "%s", $value);
-				}, $conditions, array_keys($conditions)));
+			if (is_array($conditions)) 
+				$conditions = new Condition($conditions, $conditionOptions);
 
-			}
-
-			$query[] = "WHERE " . (string) $conditions;
+			if ($conditions = trim((string) $conditions))
+				$query[] = "WHERE " . $conditions;
 
 		}
 
-		if ($order = @$options[self::OPTION_ORDER])
-			$query[] = "ORDER BY " . $order;
+		if (isset($options[self::OPTION_ORDER])) {
+			$order = $options[self::OPTION_ORDER];
 
-		if (!is_null($offset = @$options[self::OPTION_OFFSET]) || !is_null($limit = @$options[self::OPTION_LIMIT]))
+			$query[] = "ORDER BY " . $order;
+		}
+
+		if (isset($options[self::OPTION_OFFSET]) || isset($options[self::OPTION_LIMIT])) {
+			$offset = isset($options[self::OPTION_OFFSET]) ? $options[self::OPTION_OFFSET] : 0;
+			$limit = isset($options[self::OPTION_LIMIT]) ? $options[self::OPTION_LIMIT] : 18446744073709551615;
+
 			$query[] = "LIMIT " . (int) $offset . "," . (int) $limit;
+		}
 		
 		return static::__createFromQuery(implode(" ", $query), $options);
 	}
@@ -489,8 +500,8 @@ abstract class Record extends Object {
 	 * @param array|NULL $options An optional list of requirements and options.
 	 * @return array Returns an array of Record instances.
 	 */
-	public static function find(array $conditions = NULL, array $options = NULL) {
-		return static::all(array_merge((array) $options, array(self::OPTION_CONDITIONS => (array) $conditions)));
+	public static function find($conditions = NULL, array $options = NULL) {
+		return static::all(array_merge((array) $options, array(self::OPTION_CONDITIONS => $conditions)));
 	}
 
 	/**
@@ -501,7 +512,7 @@ abstract class Record extends Object {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public static function findOne(array $conditions = NULL, array $options = NULL) {
+	public static function findOne($conditions = NULL, array $options = NULL) {
 		$options = array_merge((array) $options, array(
 				self::OPTION_LIMIT => 1
 			));
@@ -517,7 +528,7 @@ abstract class Record extends Object {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public static function first(array $conditions = NULL, array $options = NULL) {
+	public static function first($conditions = NULL, array $options = NULL) {
 		$options = array_merge((array) $options, array(
 				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("`%s` ASC", $key);}, static::__getPrimaryKeys()))
 			));
@@ -533,7 +544,7 @@ abstract class Record extends Object {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public static function last(array $conditions = NULL, array $options = NULL) {
+	public static function last($conditions = NULL, array $options = NULL) {
 		$options = array_merge((array) $options, array(
 				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("`%s` DESC", $key);}, static::__getPrimaryKeys()))
 			));
