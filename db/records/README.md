@@ -114,3 +114,23 @@ $foos = Foo::findByTitle("Hello Record!", array("Hello Bird!", "Hello Dog!"));
 ```
 
 The above example will return a Collection of Foos where the title matches either "Hello Record!", "Hello Bird!", or "Hello Dog!".
+
+### A note on find by results
+
+Remember that when a single argument is supplied to any of the find by methods a single instance is returned (and not a collection which would be the case when multiple arguments are supplied). This wouldn't be a problem with ID values since they'd probably be unique anyway but could cause some confusion with non-unique values like in the example below:
+
+```php
+$foos = Foo::findByTitle("Hello Bird!");
+```
+
+Here you might expect `$foos` to be a collection of all `Foo` instances where the title matches "Hello Bird!" but it actually will be only the first single `Foo` instance that matches this condition.
+
+To make sure the result will be a collection multiple arguments should be supplied or, for the above example where there is just one value to search for, the argument should be supplied as an array like the example below:
+
+```php
+$foos = Foo::findByTitle(array("Hello Bird!"));
+```
+
+## Deleting a record
+
+A record can be deleted from the database using its `delete()` method. This will remove any record matching the primary keys as set for the called object from the database.
