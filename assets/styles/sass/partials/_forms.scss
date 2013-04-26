@@ -87,6 +87,11 @@ label.lowtone {
 				& + select.lowtone {
 					margin-left: 30%; 
 					width: 65%;
+
+					& + .lowtone.comment {
+						margin-left: 0;
+						width: 100%;
+					}
 				}
 		}
 	}
