@@ -479,8 +479,10 @@ abstract class Record extends Object {
 
 		if (isset($options[self::OPTION_ORDER])) {
 			$order = $options[self::OPTION_ORDER];
+			
+			if ($order = trim($order))
+				$query[] = "ORDER BY " . $order;
 
-			$query[] = "ORDER BY " . $order;
 		}
 
 		if (isset($options[self::OPTION_OFFSET]) || isset($options[self::OPTION_LIMIT])) {
@@ -529,9 +531,9 @@ abstract class Record extends Object {
 	 * FALSE if no entry matching the given requirements was found.
 	 */
 	public static function first($conditions = NULL, array $options = NULL) {
-		$options = array_merge((array) $options, array(
-				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("`%s` ASC", $key);}, static::__getPrimaryKeys()))
-			));
+		$options = array_merge(array(
+				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("%s ASC", Record::__escapeIdentifier($key));}, static::__getPrimaryKeys()))
+			), (array) $options);
 
 		return static::findOne($conditions, $options);
 	}
@@ -545,9 +547,9 @@ abstract class Record extends Object {
 	 * FALSE if no entry matching the given requirements was found.
 	 */
 	public static function last($conditions = NULL, array $options = NULL) {
-		$options = array_merge((array) $options, array(
-				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("`%s` DESC", $key);}, static::__getPrimaryKeys()))
-			));
+		$options = array_merge(array(
+				self::OPTION_ORDER => implode(",", array_map(function($key) {return sprintf("%s DESC", Record::__escapeIdentifier($key));}, static::__getPrimaryKeys()))
+			), (array) $options);
 
 		return static::findOne($conditions, $options);
 	}
