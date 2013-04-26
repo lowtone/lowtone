@@ -33,12 +33,16 @@
       packages: ['corechart']
     });
     drawChart = function(dataArray, opts) {
-      var chart, data, options;
+      var chart, data, draw, options;
       options = $.extend(true, null, defaults, opts);
       chart = new g.visualization[options.type]($(this).get(0));
       data = new g.visualization.arrayToDataTable(dataArray);
       delete options.type;
-      return chart.draw(data, options);
+      draw = function() {
+        return chart.draw(data, options);
+      };
+      $(window).resize(draw);
+      return draw();
     };
   }
 
