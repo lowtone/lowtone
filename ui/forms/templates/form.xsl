@@ -55,7 +55,7 @@
 	<!-- Fieldset -->
 	
 	<xsl:template match="fieldset">
-		<fieldset>
+		<fieldset id="{@uniqid}">
 			<xsl:call-template name="class" />
 			<xsl:apply-templates select="legend" />
 			<xsl:apply-templates select="input|html" />
