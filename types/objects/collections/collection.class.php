@@ -246,6 +246,12 @@ class Collection extends XArray implements Documentable {
 		}
 	}
 
+	public function __toString() {
+		return (string) $this
+			->__toDocument()
+			->build();
+	}
+
 	// Output
 
 	public function createDocument() {

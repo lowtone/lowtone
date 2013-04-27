@@ -111,6 +111,12 @@ class Object extends XArray implements Documentable {
 		}, array_keys($properties)), $properties);
 	}
 
+	public function __toString() {
+		return (string) $this
+			->__toDocument()
+			->build();
+	}
+
 	// Output
 
 	public function createDocument() {
