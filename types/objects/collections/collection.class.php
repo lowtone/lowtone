@@ -305,7 +305,7 @@ class Collection extends XArray implements Documentable {
 	}
 	
 	public static function __getDocumentClass() {
-		return "lowtone\\types\\objects\\collections\\out\\CollectionDocument";
+		return __NAMESPACE . "\\out\\CollectionDocument";
 	}
 
 	public static function create($objects = NULL, Collection $previous = NULL) {

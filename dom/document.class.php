@@ -106,7 +106,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 			throw $e;
 		}
 		
-		if (is_array($value) || $value instanceof \stdClass)
+		if (is_array($value) || $value instanceof XArray || $value instanceof \stdClass)
 			$element->appendCreateElements((array) $value);
 		else if (!is_null($value))
 			$element->appendChild($this->createTextNode($value));
