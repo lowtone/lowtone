@@ -60,7 +60,7 @@ class InputDocument extends FormElementDocument {
 	}
 	
 	public function build(array $options = NULL) {
-		parent::build($options);
+		parent::build((array) $options);
 
 		$inputElement = $this->documentElement;
 			
