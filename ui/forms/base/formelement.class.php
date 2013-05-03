@@ -46,6 +46,13 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 		return $this;
 	}
 
+	public function offsetSet($offset, $value) {
+		if (isset($offset))
+			return parent::offsetSet($offset, $value);
+
+		return $this->appendChild($value);
+	}
+
 	public function addClass() {
 		return $this->setClass(array_unique(Util::mergeArgs(array_merge($this->getClass(), func_get_args()))));
 	}
