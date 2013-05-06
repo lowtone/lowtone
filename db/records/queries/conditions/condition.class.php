@@ -50,6 +50,9 @@ class Condition implements ArrayAccess {
 		$conditions = (array) $this->itsConditions;
 
 		return (string) implode(" {$this->itsLogicalOperator} ", array_map(function($key, $value) use ($condition) {
+			if (is_array($value))
+				$value = new Condition($value);
+			
 			if ($value instanceof Condition)
 				return "({$value})";
 
