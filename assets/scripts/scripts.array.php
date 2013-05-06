@@ -87,6 +87,11 @@ return apply_filters("lowtone_scripts", array(
 				"src" => $scriptsUrl . "/jquery/mutation-events/mutations.val", 
 				"deps" => array("jquery-mutation-core")
 			),
+		"jquery-ui-chosen" => array(
+				"src" => $scriptsUrl . "/jquery/ui/chosen/jquery.chosen",
+				"min" => true, 
+				"deps" => array("jquery")
+			),
 		"jquery-ui-tipsy" => array(
 				"src" => $scriptsUrl . "/jquery/ui/tipsy/jquery.tipsy", 
 				"deps" => array("jquery")
