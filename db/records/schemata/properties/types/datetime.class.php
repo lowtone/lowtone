@@ -21,9 +21,9 @@ class DateTime extends Property {
 			), (array) $attributes));
 	}
 
-	protected function createConvertToDateTime($defaultFormat) {
-		return function($val) use ($defaultFormat) {
-			$val = is_numeric($val) ? DT::fromUnix($val) : DT::fromString($val);
+	public function createConvertToDateTime($defaultFormat, \DateTimeZone $dateTimeZone = NULL) {
+		return function($val) use ($defaultFormat, $dateTimeZone) {
+			$val = is_numeric($val) ? DT::fromUnix($val, $dateTimeZone) : DT::fromString($val, $dateTimeZone);
 			return $val->setDefaultFormat($defaultFormat);
 		};
 	}
