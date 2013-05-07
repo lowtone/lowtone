@@ -124,12 +124,12 @@ class Schema extends Object {
 		$schema->setRecordClass(get_called_class());
 
 		foreach ($properties as $property) {
-			if (isset($schema[$property]))
+			if (isset($schema[$property]) && !is_null($schema[$property]))
 				continue;
 
 			// Id
 
-			if (preg_match("/[^[:alpha:]]id$/i", $property)) {
+			if (preg_match("/(^|[^[:alpha:]])id$/i", $property)) {
 				$attributes = new properties\types\Int(array(
 					Property::ATTRIBUTE_LENGTH => properties\types\Int::LENGTH_BIG // BIGINT
 				));
