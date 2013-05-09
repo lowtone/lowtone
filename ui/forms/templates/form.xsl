@@ -11,6 +11,7 @@
 	
 	<xsl:template match="form">
 		<form>
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@uniqid">
 				<xsl:attribute name="id">
 					<xsl:value-of select="@uniqid" />
@@ -56,6 +57,7 @@
 	
 	<xsl:template match="fieldset">
 		<fieldset id="{@uniqid}">
+			<xsl:call-template name="attributes" />
 			<xsl:call-template name="class" />
 			<xsl:apply-templates select="legend" />
 			<xsl:apply-templates select="fieldset|input|html" />
@@ -74,6 +76,7 @@
 	
 	<xsl:template match="input">
 		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}">
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@disabled">
 				<xsl:attribute name="disabled">1</xsl:attribute>
 			</xsl:if>
@@ -94,6 +97,7 @@
 		<xsl:choose>
 			<xsl:when test="@multiple">
 				<textarea id="{$id}" name="{name}">
+					<xsl:call-template name="attributes" />
 					<xsl:if test="@disabled">
 						<xsl:attribute name="disabled">1</xsl:attribute>
 					</xsl:if>
@@ -103,6 +107,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<input id="{$id}" type="{@type}" name="{name}" value="{value}">
+					<xsl:call-template name="attributes" />
 					<xsl:if test="@disabled">
 						<xsl:attribute name="disabled">1</xsl:attribute>
 					</xsl:if>
@@ -124,6 +129,7 @@
 			<xsl:with-param name="id" select="$id" />
 		</xsl:apply-templates>
 		<select id="{$id}">
+			<xsl:call-template name="attributes" />
 			<xsl:attribute name="name">
 				<xsl:value-of select="name" />
 				<xsl:if test="@multiple">
@@ -177,6 +183,7 @@
 		<xsl:variable name="id" select="@uniqid" />
 		
 		<input id="{$id}" type="{@type}" name="{name}" value="{value}" class="lowtone {@type}">
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@selected">
 				<xsl:attribute name="checked">checked</xsl:attribute>
 			</xsl:if>
@@ -199,6 +206,7 @@
 		<xsl:variable name="id" select="@uniqid" />
 		
 		<input id="{$id}" type="{@type}" name="{name}" value="{value}">
+			<xsl:call-template name="attributes" />
 			<xsl:if test="@disabled">
 				<xsl:attribute name="disabled">1</xsl:attribute>
 			</xsl:if>
@@ -231,6 +239,7 @@
 
 	<xsl:template match="html">
 		<div>
+			<xsl:call-template name="attributes" />
 			<xsl:call-template name="class" />
 			<xsl:value-of select="content" disable-output-escaping="yes" />
 		</div>
@@ -248,6 +257,15 @@
 				<xsl:value-of select="." />
 			</xsl:for-each>
 		</xsl:attribute>
+	</xsl:template>
+
+
+	<!-- Attributes -->
+
+	<xsl:template name="attributes">
+		<xsl:for-each select="attribute">
+			<xsl:attribute name="{@name}"><xsl:value-of select="." /></xsl:attribute>
+		</xsl:for-each>
 	</xsl:template>
 	
 </xsl:stylesheet>

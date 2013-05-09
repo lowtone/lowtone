@@ -74,7 +74,7 @@ class InputDocument extends FormElementDocument {
 			case Input::TYPE_SELECT:
 				$altValues = (array) $this->itsInput->getAltValue();
 				$selected = (array) $this->itsInput->getSelected();
-				$disabled = is_array($disabled = $this->itsInput->getDisabled()) ? $disabled : array();
+				$disabled = is_array($disabled = $this->itsInput->{Input::PROPERTY_DISABLED}) ? $disabled : array();
 
 				$createOption = function($parent, $value, $label) use ($selected, $disabled) {
 					if (!$label)

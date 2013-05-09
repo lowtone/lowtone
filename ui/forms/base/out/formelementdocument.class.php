@@ -18,7 +18,8 @@ class FormElementDocument extends ObjectDocument {
 	protected $itsFormElement;
 
 	const BUILD_CHILDREN = "build_children",
-		BUILD_CLASS = "build_class";
+		BUILD_CLASS = "build_class",
+		BUILD_ATTRIBUTES = "build_attributes";
 	
 	public function __construct(FormElement $element) {
 		parent::__construct($element);
@@ -32,7 +33,8 @@ class FormElementDocument extends ObjectDocument {
 					),
 				self::BUILD_ELEMENTS => false,
 				self::BUILD_CHILDREN => true,
-				self::BUILD_CLASS => true
+				self::BUILD_CLASS => true,
+				self::BUILD_ATTRIBUTES => true,
 			));
 		
 		$this->setTemplate(realpath(dirname(dirname(__DIR__)) . "/templates/form.xsl"));
@@ -50,22 +52,26 @@ class FormElementDocument extends ObjectDocument {
 				return $child instanceof FormElement;
 			});
 
-			$byOrder = array();
+			if (count($children) > 0) {
 
-			foreach ($children as $child) 
-				$byOrder[(int) $child[FormElement::PROPERTY_ORDER]][] = $child;
+				$byOrder = array();
 
-			ksort($byOrder, SORT_NUMERIC);
+				foreach ($children as $child) 
+					$byOrder[(int) $child[FormElement::PROPERTY_ORDER]][] = $child;
 
-			$children = call_user_func_array("array_merge", $byOrder);
+				ksort($byOrder, SORT_NUMERIC);
 
-			foreach ($children as $child) {
-				$childDocument = $child->createDocument();
+				$children = call_user_func_array("array_merge", $byOrder);
 
-				$childDocument->build();
+				foreach ($children as $child) {
+					$childDocument = $child->createDocument();
 
-				if ($childElement = $this->importDocument($childDocument))
-					$this->documentElement->appendChild($childElement);
+					$childDocument->build();
+
+					if ($childElement = $this->importDocument($childDocument))
+						$this->documentElement->appendChild($childElement);
+				}
+
 			}
 
 		}
@@ -74,9 +80,22 @@ class FormElementDocument extends ObjectDocument {
 
 		if ($this->getBuildOption(self::BUILD_CLASS)) {
 
-			foreach ((array) $this->itsFormElement->getClass() as $class) 
+			foreach ((array) $this->itsFormElement->{FormElement::PROPERTY_CLASS} as $class) 
 				$this->documentElement->appendCreateElement(FormElement::PROPERTY_CLASS, $class);
 
+		}
+
+		// Build attributes
+		
+		if ($this->getBuildOption(self::BUILD_ATTRIBUTES)) {
+
+			foreach ((array) $this->itsFormElement->{FormElement::PROPERTY_ATTRIBUTES} as $name => $value) {
+
+				$this->documentElement
+					->createAppendElement("attribute", $value)
+					->setAttribute("name", $name);
+
+			} 
 		}
 		
 		return $this;
