@@ -109,7 +109,7 @@ class Form extends base\FormElement {
 			if (!($element instanceof Input))
 				return;
 
-			$element->setName(array_merge($prefix, (array) $element->{Input::PROPERTY_NAME}));
+			$element->{Input::PROPERTY_NAME}(array_merge($prefix, (array) $element->{Input::PROPERTY_NAME}));
 		});
 	}
 
@@ -213,7 +213,7 @@ class Form extends base\FormElement {
 			switch ($element->{Input::PROPERTY_TYPE}) {
 				case Input::TYPE_CHECKBOX:
 				case Input::TYPE_RADIO:
-					$element->{Input::PROPERTY_SELECTED}($element->{Input::PROPERTY_SELECTED}() == $value);
+					$element->{Input::PROPERTY_SELECTED}($element->{Input::PROPERTY_VALUE}() == $value);
 					break;
 
 				case Input::TYPE_SELECT:
