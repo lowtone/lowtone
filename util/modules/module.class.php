@@ -47,7 +47,7 @@ abstract class Module extends Object {
 		if (!class_exists($class))
 			throw new \ErrorException(sprintf("Class '%s' doesn't exist", $class));
 
-		$args = array_slice(func_get_args(), 2);
+		$args = array_slice(func_get_args(), 1);
 		
 		$reflection = new \ReflectionClass($class);
 
