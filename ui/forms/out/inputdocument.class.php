@@ -33,7 +33,7 @@ class InputDocument extends FormElementDocument {
 							return URL::queryParam($name);
 						},
 						Input::PROPERTY_DISABLED => function($disabled, $input) {
-							switch($input->getType()) {
+							switch($input->{Input::PROPERTY_TYPE}) {
 								case Input::TYPE_SELECT:
 									if (is_array($disabled))
 										return NULL;
@@ -64,16 +64,16 @@ class InputDocument extends FormElementDocument {
 
 		$inputElement = $this->documentElement;
 			
-		if ($this->itsInput->getMultiple())
+		if ($this->itsInput->{Input::PROPERTY_MULTIPLE})
 			$inputElement->setAttribute(Input::PROPERTY_MULTIPLE, "1");
 		
-		if ($this->itsInput->getSelected())
+		if ($this->itsInput->{Input::PROPERTY_SELECTED})
 			$inputElement->setAttribute(Input::PROPERTY_SELECTED, "1");
 		
-		switch ($this->itsInput->getType()) {
+		switch ($this->itsInput->{Input::PROPERTY_TYPE}) {
 			case Input::TYPE_SELECT:
-				$altValues = (array) $this->itsInput->getAltValue();
-				$selected = (array) $this->itsInput->getSelected();
+				$altValues = (array) $this->itsInput->{Input::PROPERTY_ALT_VALUE};
+				$selected = (array) $this->itsInput->{Input::PROPERTY_SELECTED};
 				$disabled = is_array($disabled = $this->itsInput->{Input::PROPERTY_DISABLED}) ? $disabled : array();
 
 				$createOption = function($parent, $value, $label) use ($selected, $disabled) {
@@ -106,13 +106,13 @@ class InputDocument extends FormElementDocument {
 					return $optGroupElement;
 				};
 				
-				for ($values = (array) $this->itsInput->getValue(); list($key, $value) = each($values);) 
+				for ($values = (array) $this->itsInput->{Input::PROPERTY_VALUE}; list($key, $value) = each($values);) 
 					$element = is_array($value) ? $createOptGroup($inputElement, $value, @$altValues[$key], $key) : $createOption($inputElement, $value, @$altValues[$key]);
 				
 				break;
 			
 			default:
-				$inputElement->appendCreateElement(Input::PROPERTY_VALUE, (string) $this->itsInput->getValue());
+				$inputElement->appendCreateElement(Input::PROPERTY_VALUE, (string) $this->itsInput->{Input::PROPERTY_VALUE});
 		}
 		
 		return $this;

@@ -97,6 +97,11 @@ class Form extends base\FormElement {
 		return Html::create($this, $properties);
 	}
 
+	/**
+	 * Prefix the names for all inputs of the form.
+	 * @param array|string $prefix The prefix for the inputs.
+	 * @return Form Returns the form for method chaining.
+	 */
 	public function prefixNames($prefix) {
 		$prefix = Util::mergeArgs(func_get_args());
 
@@ -104,12 +109,21 @@ class Form extends base\FormElement {
 			if (!($element instanceof Input))
 				return;
 
-			$element->setName(array_merge($prefix, (array) $element->getName()));
+			$element->setName(array_merge($prefix, (array) $element->{Input::PROPERTY_NAME}));
 		});
 	}
 
 	// Nonce
 	
+	/**
+	 * Add a nonce field to the form.
+	 * @param integer $action An action definition for the nonce field. Should 
+	 * give the context to what is taking place.
+	 * @param string $name The name for the nonce field.
+	 * @param boolean $referer Whether also the referer hidden form field should 
+	 * be created.
+	 * @return Form Returns the form for method chaining.
+	 */
 	public function nonceField($action = -1, $name = "_wpnonce", $referer = true) {
 		$this
 			->appendChild(
@@ -128,6 +142,10 @@ class Form extends base\FormElement {
 
 	// Referer
 
+	/**
+	 * Add a referer field to the form.
+	 * @return Form Returns the form for method chaining.
+	 */
 	public function refererField() {
 		return $this
 			->appendChild(
@@ -140,6 +158,12 @@ class Form extends base\FormElement {
 
 	// Settings API
 	
+	/**
+	 * Add nonce, action and option_page to the form. This is required for forms 
+	 * used on settings pages.
+	 * @param string $optionGroup The name for the settings group.
+	 * @return Form Returns the form for method chaining.
+	 */
 	public function settingsFields($optionGroup) {
 		$this->itsOptionGroup = $optionGroup;
 
@@ -161,12 +185,21 @@ class Form extends base\FormElement {
 
 	// Getters
 	
+	/**
+	 * Get the name for the option group (only for forms on settings pages). 
+	 * @return string Returns the name for the option group.
+	 */
 	public function getOptionGroup() {
 		return $this->itsOptionGroup;
 	}
 
 	// Setters
 	
+	/**
+	 * Set values on all inputs in the form.
+	 * @param array An array of input names and their values.
+	 * @return Form Returns the form for method chaining.
+	 */
 	public function setValues($values) {
 		$values = new Map($values);
 
@@ -174,21 +207,21 @@ class Form extends base\FormElement {
 			if (!($element instanceof Input))
 				return;
 
-			if (is_null($value = $values->path($element->getName())))
+			if (is_null($value = $values->path($element->{Input::PROPERTY_NAME})))
 				return;
 
-			switch ($element->getType()) {
+			switch ($element->{Input::PROPERTY_TYPE}) {
 				case Input::TYPE_CHECKBOX:
 				case Input::TYPE_RADIO:
-					$element->setSelected($element->getValue() == $value);
+					$element->{Input::PROPERTY_SELECTED}($element->{Input::PROPERTY_SELECTED}() == $value);
 					break;
 
 				case Input::TYPE_SELECT:
-					$element->setSelected($value);
+					$element->{Input::PROPERTY_SELECTED}($value);
 					break;
 
 				default:
-					$element->setValue($value);
+					$element->{Input::PROPERTY_VALUE}($value);
 
 			}
 		});

@@ -248,16 +248,5 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 				self::PROPERTY_ATTRIBUTES => $arrayProperty,
 			), (array) $defaults));
 	}
-
-	// Deprecated
-	
-	/*public function getUniqueId() {return $this->__get(self::PROPERTY_UNIQUE_ID);}
-	public function getDisabled() {return $this->__get(self::PROPERTY_DISABLED);}
-	public function getClass() {return (array) $this->__get(self::PROPERTY_CLASS);}
-	public function getAttributes() {return (array) $this->__get(self::PROPERTY_ATTRIBUTES);}*/
-	/*public function setUniqueId($uniqueId) {return $this->__set(self::PROPERTY_UNIQUE_ID, $uniqueId);}
-	public function setDisabled($disabled) {return $this->__set(self::PROPERTY_DISABLED, $disabled);}
-	public function setClass(array $class) {return $this->__set(self::PROPERTY_CLASS, $class);}
-	public function setAttributes(array $attributes) {return (array) $this->__set(self::PROPERTY_ATTRIBUTES, $attributes);}*/
 	
 }
