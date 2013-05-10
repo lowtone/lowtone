@@ -29,26 +29,6 @@ class Input extends base\FormElement {
 		TYPE_HIDDEN = "hidden",
 		TYPE_FILE = "file";
 	
-	// Getters
-	
-	public function getType() {return $this->__get(self::PROPERTY_TYPE);}
-	public function getLabel() {return $this->__get(self::PROPERTY_LABEL);}
-	public function getName() {return $this->__get(self::PROPERTY_NAME);}
-	public function getValue() {return $this->__get(self::PROPERTY_VALUE);}
-	public function getAltValue() {return $this->__get(self::PROPERTY_ALT_VALUE);}
-	public function getMultiple() {return (bool) $this->__get(self::PROPERTY_MULTIPLE);}
-	public function getSelected() {return $this->__get(self::PROPERTY_SELECTED);}
-	
-	// Setters
-	
-	public function setType($type) {return $this->__set(self::PROPERTY_TYPE, $type);}
-	public function setLabel($label) {return $this->__set(self::PROPERTY_LABEL, $label);}
-	public function setName($name) {return $this->__set(self::PROPERTY_NAME, $name);}
-	public function setValue($value) {return $this->__set(self::PROPERTY_VALUE, $value);}
-	public function setAltValue($altValue) {return $this->__set(self::PROPERTY_ALT_VALUE, $altValue);}
-	public function setMultiple($multiple) {return $this->__set(self::PROPERTY_MULTIPLE, (bool) $multiple);}
-	public function setSelected($selected) {return $this->__set(self::PROPERTY_SELECTED, $selected);}
-	
 	// Static
 	
 	public static function create(Form $form, $type, array $properties = NULL, array $options = NULL) {
@@ -65,5 +45,22 @@ class Input extends base\FormElement {
 	public static function __getDocumentClass() {
 		return __NAMESPACE__ . "\\out\\InputDocument";
 	}
+
+	// Deprecated
+	
+	/*public function getType() {return $this->__get(self::PROPERTY_TYPE);}
+	public function getLabel() {return $this->__get(self::PROPERTY_LABEL);}
+	public function getName() {return $this->__get(self::PROPERTY_NAME);}
+	public function getValue() {return $this->__get(self::PROPERTY_VALUE);}
+	public function getAltValue() {return $this->__get(self::PROPERTY_ALT_VALUE);}
+	public function getMultiple() {return (bool) $this->__get(self::PROPERTY_MULTIPLE);}
+	public function getSelected() {return $this->__get(self::PROPERTY_SELECTED);}
+	public function setType($type) {return $this->__set(self::PROPERTY_TYPE, $type);}
+	public function setLabel($label) {return $this->__set(self::PROPERTY_LABEL, $label);}
+	public function setName($name) {return $this->__set(self::PROPERTY_NAME, $name);}
+	public function setValue($value) {return $this->__set(self::PROPERTY_VALUE, $value);}
+	public function setAltValue($altValue) {return $this->__set(self::PROPERTY_ALT_VALUE, $altValue);}
+	public function setMultiple($multiple) {return $this->__set(self::PROPERTY_MULTIPLE, (bool) $multiple);}
+	public function setSelected($selected) {return $this->__set(self::PROPERTY_SELECTED, $selected);}*/
 	
 }

@@ -7,6 +7,8 @@ use lowtone\Util,
 	lowtone\ui\forms\Form;
 
 /**
+ * The form element represents a base for each node in a form.
+ * 
  * @author Paul van der Meijs <code@paulvandermeijs.nl>
  * @copyright Copyright (c) 2011-2012, Paul van der Meijs
  * @license http://wordpress.lowtone.nl/license/
@@ -31,6 +33,12 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 		PROPERTY_ATTRIBUTES = "attributes",
 		PROPERTY_ORDER = "order";
 	
+	/**
+	 * Constructor for the form element.
+	 * @param Form $form The form instance to which the element belongs.
+	 * @param array|NULL $properties Optional properties to set on the element.
+	 * @param array|NULL $options Options to set on the element.
+	 */
 	public function __construct(Form $form = NULL, $properties = NULL, array $options = NULL) {
 		$properties = array_merge(array(
 				self::PROPERTY_UNIQUE_ID => sha1(uniqid(md5(serialize($this->itsForm)), true)),
@@ -43,12 +51,27 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 		
 	}
 	
+	/**
+	 * Add a child form element.
+	 * @param FormElement $child The form element to add as a child.
+	 * @return FormElement Returns the form element for method chaining.
+	 */
 	public function appendChild(FormElement $child) {
+		$child->itsForm = $this->itsForm;
+
 		$this->itsChildren[] = $child;
 
 		return $this;
 	}
 
+	/**
+	 * Overwrite parent method to add a child if no offset is defined. When an 
+	 * offset is defined the variable is set as a property on the form element 
+	 * object (confusing?).
+	 * @param string|int|NULL $offset An optional offset for the property.
+	 * @param mixed $value The property value.
+	 * @return FormElement Returns the form element for method chaining.
+	 */
 	public function offsetSet($offset, $value) {
 		if (isset($offset))
 			return parent::offsetSet($offset, $value);
@@ -56,6 +79,9 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 		return $this->appendChild($value);
 	}
 	
+	/**
+	 * Clone children.
+	 */
 	public function __clone() {
 		$this->itsChildren = array_map(function($child) {
 			return clone $child;
@@ -64,6 +90,14 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 
 	// Children
 	
+	/**
+	 * Walk through all child form elements and their children of the called or 
+	 * a given element.
+	 * @param callback $callback A function to execute on the elements.
+	 * @param FormElement|null $element Discard to execute on the called object 
+	 * or provide a subject form element.
+	 * @return FormElement Returns the subject form element.
+	 */
 	public function walkChildren($callback, FormElement $element = NULL) {
 		if (!is_callable($callback))
 			throw new \Exception(sprintf("%s requires a valid callback", __FUNCTION__));
@@ -87,6 +121,10 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 
 	// Output
 	
+	/**
+	 * Create HTML output for the form element and send it to the client.
+	 * @param array|NULL $options Options for building the document.
+	 */
 	public function out(array $options = NULL) {
 		$document = $this
 			->createDocument()
@@ -100,6 +138,10 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 			->saveHTML();
 	}
 
+	/**
+	 * Create a Html string for the form.
+	 * @return string A Html string representation for the form element.
+	 */
 	public function __toString() {
 		return $this
 			->createDocument()
@@ -110,22 +152,49 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 	
 	// Getters
 	
+	/**
+	 * Get the form instance to which the form element belongs.
+	 * @return Form Returns the form instance to which the form element belongs.
+	 */
 	public function getForm() {
 		return $this->itsForm;
 	}
 	
+	/**
+	 * Get all children of the form element.
+	 * @return array Returns an array of form elements.
+	 */
 	public function getChildren() {
 		return (array) $this->itsChildren;
 	}
 	
 	// Setters
 	
+	/**
+	 * Set the children for the form element.
+	 * @param array $children The new children for the form element.
+	 * @return FormElement Returns the form element for method chaining.
+	 */
 	public function setChildren(array $children) {
 		$this->itsChildren = $children; 
 
 		return $this;
 	}
 
+	/**
+	 * Set an attribute on the form element. If the attribute exists it will be 
+	 * overwritten.
+	 * @param string|array $name Either a name for the attribute to set or an 
+	 * array of attributes. When a name is provided every even argument is 
+	 * assumed to be an attribute name (with the first argument starting in 
+	 * position 0) and every odd argument is assumed to be the value bound to 
+	 * the preceding name. When an array is supplied all arguments are combined 
+	 * in a single array and set as attributes.
+	 * @param string|array|NULL $value Either a value if the $name argument is a 
+	 * string or an optional extra attribute array if the $name argument is an
+	 * array.
+	 * @return FormElement Returns the form element for method chaining.
+	 */
 	public function setAttribute($name, $value = NULL) {
 		$atts = is_array($name) ? Util::mergeArgs(func_get_args()) : XArray::remix(func_get_args());
 
@@ -133,12 +202,26 @@ abstract class FormElement extends Record implements interfaces\FormElement {
 		return $this->{self::PROPERTY_ATTRIBUTES}(array_merge($this->{self::PROPERTY_ATTRIBUTES}, (array) $atts));
 	}
 
+	/**
+	 * Add a class definition to the form element. Every class definition will 
+	 * only occur once.
+	 * @param string $class The class definition to add to the form element. 
+	 * Double class definitions are removed.
+	 * @return FormElement Returns the form element for method chaining.
+	 */
 	public function addClass($class) {
 		return $this->{self::PROPERTY_CLASS}(array_unique(Util::mergeArgs(array_merge($this->{self::PROPERTY_CLASS}, func_get_args()))));
 	}
 	
 	// Static
 	
+	/**
+	 * Create a new form element instance.
+	 * @param Form $form The form instance to which the element belongs.
+	 * @param array|NULL $properties Optional properties to set on the element.
+	 * @param array|NULL $options Options to set on the element.
+	 * @return FormElement Returns the newly created form element instance.
+	 */
 	public static function create(Form $form, array $properties = NULL, array $options = NULL) {
 		return new static($form, $properties, $options);
 	}

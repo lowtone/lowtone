@@ -26,6 +26,11 @@ class Form extends base\FormElement {
 
 	protected $itsOptionGroup;
 	
+	/**
+	 * Constructor for the form.
+	 * @param array|NULL $properties Optional properties to set on the form.
+	 * @param array|NULL $options Options to set on the form.
+	 */
 	public function __construct($properties = NULL, array $options = NULL) {
 		$properties = array_merge(array(
 				self::PROPERTY_METHOD => self::METHOD_POST
@@ -37,6 +42,16 @@ class Form extends base\FormElement {
 	
 	// Form elements
 	
+	/**
+	 * Create a form element instance.
+	 * @param string $class The class name for the required form element 
+	 * instance.
+	 * @param array|NULL $properties Optional properties to set on the element.
+	 * @param array|NULL $options Options to set on the element.
+	 * @throws ErrorException Throws an error exception if the required class 
+	 * isn't a instance of the FormElement class.
+	 * @return FormElement Returns the newly created form element.
+	 */
 	public function createElement($class, array $properties = NULL, array $options = NULL) {
 		$reflector = new ReflectionClass($class);
 
@@ -52,14 +67,32 @@ class Form extends base\FormElement {
 			));
 	}
 
+	/**
+	 * Create a new field set instance.
+	 * @param array|NULL $properties Optional properties to set on the field 
+	 * set.
+	 * @return FieldSet Returns the newly created field set.
+	 */
 	public function createFieldSet(array $properties = NULL) {
 		return FieldSet::create($this, $properties);
 	}
 	
+	/**
+	 * Create a new input instance.
+	 * @param string $type The type for the input.
+	 * @param array|NULL $properties Optional properties to set on the input. 
+	 * @return Input Returns the newly created input.
+	 */
 	public function createInput($type, array $properties = NULL) {
 		return Input::create($this, $type, $properties);
 	}
 
+	/**
+	 * Create a new Html instance.
+	 * @param array|NULL $properties Optional properties to set on the html 
+	 * section. 
+	 * @return Html Returns the newly create Html section.
+	 */
 	public function createHtml(array $properties = NULL) {
 		return Html::create($this, $properties);
 	}

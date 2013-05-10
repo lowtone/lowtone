@@ -12,18 +12,15 @@ class Html extends base\FormElement {
 
 	const PROPERTY_CONTENT = "content";
 
-	// Getters
-
-	public function getContent() {return $this->__get(self::PROPERTY_CONTENT);}
-
-	// Setters
-	
-	public function setContent($content) {return $this->__set(self::PROPERTY_CONTENT, $content);}
-	
 	// Static
 
 	public static function __getDocumentClass() {
 		return __NAMESPACE__ . "\\out\\HtmlDocument";
 	}
+
+	// Deprecated
+
+	/*public function getContent() {return $this->__get(self::PROPERTY_CONTENT);}
+	public function setContent($content) {return $this->__set(self::PROPERTY_CONTENT, $content);}*/
 
 }
