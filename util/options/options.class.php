@@ -3,6 +3,8 @@ namespace lowtone\util\options;
 use lowtone\types\arrays\Map;
 
 /**
+ * @todo Default $itsRecursive to FALSE.
+ * 
  * @author Paul van der Meijs <code@lowtone.nl>
  * @copyright Copyright (c) 2011-2012, Paul van der Meijs
  * @license http://wordpress.lowtone.nl/license/
@@ -10,6 +12,8 @@ use lowtone\types\arrays\Map;
  * @package wordpress\libs\lowtone\util\options
  */
 class Options extends Map {
+
+	protected $itsRecursive = true;
 	
 	/**
 	 * Update the build options with the given set of options
@@ -17,19 +21,37 @@ class Options extends Map {
 	 * @return array Returns the resulting option set.
 	 */
 	public function updateOptions(array $options) {
-		return $this->setOptions((array) $this->mergeRecursive($options));
+		return $this->setOptions((array) ($this->itsRecursive ? $this->mergeRecursive($options) : $this->merge($options)));
 	}
 	
 	// Getters
 	
-	public function getOptions() {return $this->getArrayCopy();}
+	public function getOptions() {
+		return $this->getArrayCopy();
+	}
 	
-	public function getOption($option) {return @$this[strtolower($option)];}
-		
+	public function getOption($option) {
+		return isset($this[$option = strtolower($option)]) ? $this[$option] : NULL;
+	}
+	
 	// Setters
 	
-	public function setOptions(array $options) {$this->exchangeArray($options); return $this;}
+	public function setOptions(array $options) {
+		$this->exchangeArray($options); 
+
+		return $this;
+	}
 	
-	public function setOption($option, $value) {$this[strtolower($option)] = $value; return $this;}
+	public function setOption($option, $value) {
+		$this[strtolower($option)] = $value; 
+
+		return $this;
+	}
+
+	public function setRecursive($recursive = true) {
+		$this->itsRecursive = $recursive;
+
+		return $this;
+	}
 	
 }
