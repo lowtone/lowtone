@@ -411,9 +411,17 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 		return $this;
 	}
 	
-	public function setBuildOption($option, $value) {$this->itsBuildOptions->setOption($option, $value); return $this;}
+	public function setBuildOption($option, $value) {
+		$this->itsBuildOptions->setOption($option, $value); 
 
-	public function setTemplate($template) {$this->itsTemplate = $template; return $this;}
+		return $this;
+	}
+
+	public function setTemplate($template) {
+		$this->itsTemplate = $template; 
+
+		return $this;
+	}
 	
 	// Magic
 	
