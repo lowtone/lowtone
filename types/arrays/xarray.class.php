@@ -4,6 +4,8 @@ use ArrayObject,
 	ReflectionClass;
 
 /**
+ * @todo Figure out return values.
+ * 
  * @author Paul van der Meijs <code@paulvandermeijs.nl>
  * @copyright Copyright (c) 2011-2012, Paul van der Meijs
  * @license http://wordpress.lowtone.nl/license/
@@ -115,7 +117,7 @@ class XArray extends ArrayObject {
 		
 		array_unshift($input, $callback);
 		
-		return new static(call_user_func_array("array_map", $input));
+		return $instance->__getClone(call_user_func_array("array_map", $input));
 	}
 	
 	public function mapKeys($callback, $input = NULL) {
@@ -349,6 +351,15 @@ class XArray extends ArrayObject {
 	
 	protected function __instance($options = 0) {
 		return self::INSTANCE_THIS & $options && isset($this) && $this instanceof XArray ? $this : (self::INSTANCE_NEW & $options ? new static() : NULL);
+	}
+
+	public function __getClone($input = NULL) {
+		$clone = clone $this;
+
+		if (isset($input))
+			$clone->exchangeArray((array) $input);
+
+		return $clone;
 	}
 	
 	// Static

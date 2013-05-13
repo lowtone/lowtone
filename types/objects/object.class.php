@@ -145,10 +145,6 @@ class Object extends XArray implements Documentable {
 		return get_called_class();
 	}
 
-	public function __getClone() {
-		return clone $this;
-	}
-
 	// Static
 
 	/**
