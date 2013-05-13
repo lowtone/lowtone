@@ -211,6 +211,19 @@ class XArray extends ArrayObject {
 		return new static($array);
 	}
 
+	public function merge() {
+		$input = func_get_args();
+		
+		if ($instance = self::__instance(self::INSTANCE_THIS))
+			array_unshift($input, (array) $instance);
+		
+		$values = call_user_func_array("array_merge", array_map(function($append) {
+				return (array) $append;
+			}, $input));
+
+		return new static($values);
+	}
+
 	public function mergeRecursive() {
 		$input = func_get_args();
 		
