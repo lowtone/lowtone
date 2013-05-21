@@ -153,6 +153,39 @@ class DateTime extends Base {
 				
 			case "seconds":
 				return $this->format("s");
+
+			case "week":
+				return $this->format("W");
+
+			case "day_of_week":
+				return $this->format("N");
+
+			case "day_of_year":
+				return $this->format("z");
+
+			case "days_in_month":
+				return $this->format("t");
+
+			case "leap_year":
+				return (bool) $this->format("L");
+
+			case "timezone":
+				return $this->format("e");
+
+			case "timezone_short":
+				return $this->format("T");
+
+			case "timezone_offset":
+				return $this->format("Z");
+
+			case "dst":
+				return (bool) $this->format("I");
+
+			case "iso_8601":
+				return $this->format("c");
+
+			case "rfc_2822":
+				return $this->format("r");
 				
 		}
 	}
