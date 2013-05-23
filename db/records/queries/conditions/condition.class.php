@@ -4,9 +4,16 @@ use ArrayAccess,
 	lowtone\db\records\Record,
 	lowtone\db\records\queries\expressions\Expression;
 
+/**
+ * @author Paul van der Meijs <code@lowtone.nl>
+ * @copyright Copyright (c) 2011-2013, Paul van der Meijs
+ * @license http://wordpress.lowtone.nl/license/
+ * @version 1.0
+ * @package wordpress\libs\lowtone\db\records\queries\conditions
+ */
 class Condition implements ArrayAccess {
 
-	protected $itsConditions;
+	protected $itsPairs;
 
 	protected $itsLogicalOperator = "AND",
 		$itsRelationalOperator = "=";
@@ -14,8 +21,9 @@ class Condition implements ArrayAccess {
 	const OPTION_LOGICAL_OPERATOR = "logical_operator",
 		OPTION_RELATIONAL_OPERATOR = "relational_operator";
 
-	public function __construct($conditions = NULL, $options = NULL) {
-		$this->itsConditions = (array) $conditions;
+	public function __construct($pairs = NULL, $options = NULL) {
+		foreach ((array) $pairs as $a => $b) 
+			$this->add($a, $b);
 
 		if (isset($options[self::OPTION_LOGICAL_OPERATOR]))
 			$this->itsLogicalOperator = $options[self::OPTION_LOGICAL_OPERATOR];
@@ -26,49 +34,70 @@ class Condition implements ArrayAccess {
 	}
 
 	public function offsetSet($offset, $value) {
-		if (is_null($offset)) 
-			$this->itsConditions[] = $value;
-		else 
-			$this->itsConditions[$offset] = $value;
+		$this->itsPairs[] = $value;
+
+		return $this;
 	}
 
 	public function offsetExists($offset) {
-		return isset($this->itsConditions[$offset]);
+		return isset($this->itsPairs[$offset]);
 	}
 		
 	public function offsetUnset($offset) {
-		unset($this->itsConditions[$offset]);
+		unset($this->itsPairs[$offset]);
 	}
 	
 	public function offsetGet($offset) {
-		return isset($this->itsConditions[$offset]) ? $this->itsConditions[$offset] : null;
+		return isset($this->itsPairs[$offset]) ? $this->itsPairs[$offset] : null;
+	}
+
+	public function add($a, $b, $relationalOperator = NULL) {
+		if (isset($relationalOperator) && $this->itsRelationalOperator != $relationalOperator) {
+
+			if (0 < count($this->itsPairs)) {
+				$condition = new Condition();
+
+				$condition->add($a, $b, $relationalOperator);
+
+				return ($this->itsPairs[] = $condition);
+			} else
+				$this->itsRelationalOperator = $relationalOperator;
+
+		}
+
+		$this->itsPairs[] = array($a, $b);
+
+		return $this;
 	}
 
 	public function __toString() {
 		$condition = $this;
 
-		$conditions = (array) $this->itsConditions;
+		return (string) implode(" {$this->itsLogicalOperator} ", array_map(function($pair) use ($condition) {
+			if ($pair instanceof Condition)
+				return "({$pair})";
 
-		return (string) implode(" {$this->itsLogicalOperator} ", array_map(function($key, $value) use ($condition) {
-			if (is_array($value))
-				$value = new Condition($value);
+			list($a, $b) = $pair;
+
+			if (is_array($a))
+				$a = new Condition($a);
 			
-			if ($value instanceof Condition)
-				return "({$value})";
+			if ($a instanceof Condition)
+				return "({$a})";
 
 			// Key
 
-			if (!($key instanceof Expression))
-				$key = Record::__escapeIdentifier($key);
+			if (!($a instanceof Expression))
+				$a = Record::__escapeIdentifier($a);
 
 			// Value
 			
 			$operator = $condition->relationalOperator();
 
-			if (!($value instanceof Expression)) {
+			if (!($b instanceof Expression)) {
 
-				if (NULL === $value) {
-					$value = "NULL";
+				if (NULL === $b) {
+					$b = "NULL";
 
 					switch ($operator) {
 						case "=":
@@ -84,12 +113,12 @@ class Condition implements ArrayAccess {
 					}
 
 				} else
-					$value = Record::__escape($value);
+					$b = Record::__escape($b);
 
 			}
 
-			return $key . " " . $operator . " " . $value;
-		}, array_keys($conditions), $conditions));
+			return $a . " " . $operator . " " . $b;
+		}, (array) $this->itsPairs));
 	}
 
 	public function logicalOperator($logicalOperator = NULL) {

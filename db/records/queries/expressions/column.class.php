@@ -13,13 +13,15 @@ class Column extends Expression {
 	protected $itsTable,
 		$itsColumn;
 
+	const ALL = "*";
+
 	public function __construct($column, $table = NULL) {
 		$this->itsColumn = $column;
 		$this->itsTable = $table;
 	}
 	
 	public function expression() {
-		$expr = $this->__escapeIdentifier($this->itsColumn);
+		$expr = self::ALL === $this->itsColumn ? $this->itsColumn : $this->__escapeIdentifier($this->itsColumn);
 
 		if (!is_null($this->itsTable)) {
 			$table = Table::__cast($this->itsTable);

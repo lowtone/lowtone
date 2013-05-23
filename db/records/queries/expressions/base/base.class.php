@@ -1,5 +1,5 @@
 <?php
-namespace lowtone\db\records\queries\base;
+namespace lowtone\db\records\queries\expressions\base;
 use lowtone\db\records\Record;
 
 /**

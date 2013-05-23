@@ -10,10 +10,19 @@ namespace lowtone\db\records\queries\expressions;
  */
 abstract class Expression extends base\Base {
 
-	protected $itsAlias;
+	protected $itsVal,
+		$itsAlias;
+
+	protected $itsValEscape = "__escape";
+
+	const NULL = "NULL";
+
+	public function __construct($val, $alias = NULL) {
+		$this->itsVal = $val;
+	}
 	
 	public function expression() {
-		return "NULL";
+		return is_null($val = $this->val()) ? self::NULL : $this->escapeVal($val);
 	}
 
 	public function __toString() {
@@ -25,8 +34,22 @@ abstract class Expression extends base\Base {
 		return $str;
 	}
 
+	public function val($val = NULL) {
+		return $this->__prop("itsVal", $val);
+	}
+
 	public function alias($alias = NULL) {
 		return $this->__prop("itsAlias", $alias);
+	}
+
+	protected function escapeVal($val) {
+		return $this->{$this->itsValEscape}($val);
+	}
+
+	// Static
+	
+	public static function fromString($string) {
+		 return new static($string);
 	}
 
 }
