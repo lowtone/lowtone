@@ -31,7 +31,7 @@ class Options extends Map {
 	}
 	
 	public function getOption($option) {
-		return isset($this[$option = strtolower($option)]) ? $this[$option] : NULL;
+		return $this->path($option);
 	}
 	
 	// Setters

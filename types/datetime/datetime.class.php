@@ -4,6 +4,26 @@ use DateTime as Base,
 	lowtone\types\datetime\exceptions\DateTimeException;
 
 /**
+ * @property-read int year The instance's year.
+ * @property-read int month The instance's month.
+ * @property-read int day The instance's day.
+ * @property-read int hours The instance's hours.
+ * @property-read int minutes The instance's minutes.
+ * @property-read int seconds The instance's seconds.
+ * @property-read int week The ISO-8601 week number for the instance.
+ * @property-read int day_of_week The ISO-8601 day of the week value for the 
+ * instance.
+ * @property-read int day_of_year The day of year value for the instance.
+ * @property-read int days_in_month The number of days for the instance's month.
+ * @property-read bool leap_year Whether the intance's year is leap year.
+ * @property-read string timezone Timezone identifier for the instance.
+ * @property-read string timezone_short Abbreviated timezone identifier.
+ * @property-read int timezone_offset Timezone offset in seconds.
+ * @property-read bool dst Whether or not the instance is in daylight saving 
+ * time. 
+ * @property-read int iso_8601 ISO-8601 formatted date.
+ * @property-read int rfc_2822 RFC-2822 formatted date.
+ * 
  * @author Paul van der Meijs <code@lowtone.nl>
  * @copyright Copyright (c) 2011-2012, Paul van der Meijs
  * @license http://wordpress.lowtone.nl/license/
@@ -137,34 +157,34 @@ class DateTime extends Base {
 	public function __get($name) {
 		switch ($name) {
 			case "year":
-				return $this->format("Y");
+				return (int) $this->format("Y");
 
 			case "month":
-				return $this->format("m");
+				return (int) $this->format("m");
 				
 			case "day":
-				return $this->format("d");
+				return (int) $this->format("d");
 				
 			case "hours":
-				return $this->format("H");
+				return (int) $this->format("H");
 				
 			case "minutes":
-				return $this->format("i");
+				return (int) $this->format("i");
 				
 			case "seconds":
-				return $this->format("s");
+				return (int) $this->format("s");
 
 			case "week":
-				return $this->format("W");
+				return (int) $this->format("W");
 
 			case "day_of_week":
-				return $this->format("N");
+				return (int) $this->format("N");
 
 			case "day_of_year":
-				return $this->format("z");
+				return (int) $this->format("z");
 
 			case "days_in_month":
-				return $this->format("t");
+				return (int) $this->format("t");
 
 			case "leap_year":
 				return (bool) $this->format("L");
@@ -257,6 +277,40 @@ class DateTime extends Base {
 	}
 
 	// Static
+	
+	public static function create($time = "now", $timezone = NULL) {
+		$options = array(
+				"time" => "now",
+				"timezone" => NULL
+			);
+
+		if (is_array($time)) {
+
+			$options = array_merge($options, $time);
+
+		} else {
+			
+			$options = array_merge($options, array(
+					"time" => $time,
+					"timezone" => $timezone
+				));
+
+		}
+
+		if (!($options["timezone"] instanceof \DateTimeZone))
+			$options["timezone"] = DateTimeZone::wp();
+	
+		$dateTime = static::fromString($options["time"], $options["timezone"]);
+		
+		foreach (array("year", "month", "day", "hours", "minutes", "seconds") as $def) {
+			if (!isset($options[$def]))
+				continue;
+
+			$dateTime->{$def}($options[$def]);
+		}
+
+		return $dateTime;
+	}
 
 	public static function fromUnix($timestamp, \DateTimeZone $timezone = NULL) {
 		$dateTime = new static("@" . $timestamp);
@@ -277,7 +331,7 @@ class DateTime extends Base {
 	}
 
 	public static function now() {
-		return static::createFromUnixTimestamp(time());
+		return static::fromUnix(time());
 	}
 
 	public static function abstractTimeArray($seconds) {

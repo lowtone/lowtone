@@ -42,6 +42,8 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 
 	const OPTION_CONTENT_TYPE = "content_type";
 
+	const TEMPLATE = "template";
+
 	const CONTENT_TYPE_XML = "text/xml",
 		CONTENT_TYPE_HTML = "text/html";
 	
@@ -478,7 +480,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 				$documentElement->setAttributes((array) $documentElementAttributes);
 		}
 
-		if (($template = @$options["template"]) && ($templateDocument = Document::load($template))) 
+		if (($template = @$options[self::TEMPLATE]) && ($templateDocument = Document::load($template))) 
 			$document = $document->transform($templateDocument);
 
 		return $document;
