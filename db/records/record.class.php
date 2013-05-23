@@ -4,8 +4,8 @@ use ReflectionClass,
 	lowtone\types\objects\Object,
 	lowtone\types\strings\String,
 	lowtone\db\DB,
+	lowtone\db\queries\conditions\Condition,
 	lowtone\db\records\exceptions\RecordException,
-	lowtone\db\records\queries\conditions\Condition,
 	lowtone\db\records\schemata\Schema,
 	lowtone\db\records\schemata\properties\Property;
 
@@ -137,7 +137,7 @@ abstract class Record extends Object {
 		if ($this->__readonly) 
 			throw new exceptions\ReadOnlyException("Cannot delete read-only object");
 
-		$conditions = new queries\conditions\Condition();
+		$conditions = new Condition();
 
 		foreach ($primaryKeys as $key) 
 			$conditions[$key] = isset($this[$key]) ? $this[$key] : NULL;
