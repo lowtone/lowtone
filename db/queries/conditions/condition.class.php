@@ -18,6 +18,8 @@ class Condition implements ArrayAccess {
 	protected $itsLogicalOperator = "AND",
 		$itsRelationalOperator = "=";
 
+	protected $itsParent;
+
 	const OPTION_LOGICAL_OPERATOR = "logical_operator",
 		OPTION_RELATIONAL_OPERATOR = "relational_operator";
 
@@ -55,7 +57,7 @@ class Condition implements ArrayAccess {
 		if (isset($relationalOperator) && $this->itsRelationalOperator != $relationalOperator) {
 
 			if (0 < count($this->itsPairs)) {
-				$condition = new Condition();
+				$condition = $this->__createChild();
 
 				$condition->add($a, $b, $relationalOperator);
 
@@ -80,7 +82,7 @@ class Condition implements ArrayAccess {
 			list($a, $b) = $pair;
 
 			if (is_array($a))
-				$a = new Condition($a);
+				$a = $this->__createChild($a);
 			
 			if ($a instanceof Condition)
 				return "({$a})";
@@ -137,6 +139,18 @@ class Condition implements ArrayAccess {
 		$this->itsRelationalOperator = $relationalOperator;
 
 		return $this;
+	}
+
+	public function parent() {
+		return $this->itsParent instanceof Condition ? $this->itsParent : $this;
+	}
+
+	protected function __createChild($pairs = NULL, $options = NULL) {
+		$condition = new static($pairs, $options);
+
+		$condition->itsParent = $this;
+
+		return $condition;
 	}
 
 	// Static
