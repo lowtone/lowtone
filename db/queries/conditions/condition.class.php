@@ -36,6 +36,9 @@ class Condition implements ArrayAccess {
 	}
 
 	public function offsetSet($offset, $value) {
+		if ($value instanceof Condition)
+			$value->itsParent = $this;
+		
 		$this->itsPairs[] = $value;
 
 		return $this;
