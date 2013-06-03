@@ -30,7 +30,7 @@ Manually creating a schema can be done by overwriting the `Record::__createSchem
 Creating a database table for a Record class can be done by calling `Record::__storageCreate()`. This will create a `CREATE TABLE` query from the class's schema and execute it on the database.
 
 ```php
-Foo::__storageCreate();
+Foo::__createStorage();
 ```
 
 The name for the table is created from the class name and is prefixed with the prefix as defined in the WordPress configuration and pluralized by adding an "s" at the end. With the default prefix this would result in `wp_foos` for the above example. It is also possible to define a custom table name by overwriting `Record::__getTable()`.

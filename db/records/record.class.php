@@ -241,10 +241,10 @@ abstract class Record extends Object {
 	}
 
 	/**
-	 * Create a tablein the database for the class .
+	 * Create a table in the database for the class .
 	 * @return bool Returns TRUE on success or FALSE on failure.
 	 */
-	public static function __storageCreate() {
+	public static function __createStorage() {
 		global $wpdb;
 
 		$query[] = sprintf("CREATE TABLE IF NOT EXISTS %s", self::__escapeIdentifier(static::__getTable()));
@@ -646,6 +646,12 @@ abstract class Record extends Object {
 
 	public static function __getCollectionClass() {
 		return "lowtone\\db\\records\\collections\\Collection";
+	}
+
+	// Deprecated
+	
+	public static function __storageCreate() {
+		return static::__createStorage();
 	}
 
 }
