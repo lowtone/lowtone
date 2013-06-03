@@ -27,7 +27,7 @@ Manually creating a schema can be done by overwriting the `Record::__createSchem
 
 ## Create storage
 
-Creating a database table for a Record class can be done by calling `Record::__storageCreate()`. This will create a `CREATE TABLE` query from the class's schema and execute it on the database.
+Creating a database table for a Record class can be done by calling `Record::__createStorage()`. This will create a `CREATE TABLE` query from the class's schema and execute it on the database.
 
 ```php
 Foo::__createStorage();
