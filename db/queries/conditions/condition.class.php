@@ -75,6 +75,10 @@ class Condition implements ArrayAccess {
 		return $this;
 	}
 
+	public function child($pairs = NULL, $options = NULL) {
+		return ($this->itsPairs[] = $this->__createChild($pairs, $options));
+	}
+
 	public function __toString() {
 		$condition = $this;
 
