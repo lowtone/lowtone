@@ -15,7 +15,7 @@ class String extends ArrayObject {
 		parent::__construct($this->split($string));
 	}
 
-	public function cammelcase($type = "upper") {
+	public function camelCase($type = "upper") {
 		list($string, $type) = isset($this) && $this instanceof String ? array($this, $type) : func_get_args();
 
 		$pattern = "lower" == strtolower($type) ? "/_(.?)/e" : "/(?:^|_)(.?)/e";
