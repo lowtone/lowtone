@@ -48,7 +48,7 @@ return apply_filters("lowtone_scripts", array(
 		"jquery-cycle" => array(
 				"src" => $scriptsUrl . "/jquery/ui/cycle/jquery.cycle",
 				"min" => true, 
-				"deps" => array("jquery")
+				"deps" => array("jquery", "jquery-ui-core", "jquery-effects-core")
 			),
 		"jquery-cycle-tiles" => array(
 				"src" => $scriptsUrl . "/jquery/ui/cycle/transitions/jquery.cycle-tiles",
