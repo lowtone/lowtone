@@ -47,6 +47,7 @@ class InputDocument extends FormElementDocument {
 				self::BUILD_ELEMENTS => array(
 						Input::PROPERTY_NAME,
 						Input::PROPERTY_LABEL,
+						Input::PROPERTY_PLACEHOLDER,
 						Input::PROPERTY_COMMENT
 					),
 				self::BUILD_ATTRIBUTES => array(

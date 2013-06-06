@@ -17,6 +17,7 @@ class Input extends base\FormElement {
 		PROPERTY_ALT_VALUE = "alt_value",
 		PROPERTY_MULTIPLE = "multiple",
 		PROPERTY_SELECTED = "selected",
+		PROPERTY_PLACEHOLDER = "placeholder",
 		PROPERTY_COMMENT = "comment";
 		
 	const TYPE_TEXT = "text",

@@ -75,7 +75,7 @@
 	<!-- Input -->
 	
 	<xsl:template match="input">
-		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}">
+		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}" placeholder="{placeholder}">
 			<xsl:call-template name="attributes" />
 			<xsl:if test="@disabled">
 				<xsl:attribute name="disabled">1</xsl:attribute>
@@ -96,7 +96,7 @@
 
 		<xsl:choose>
 			<xsl:when test="@multiple">
-				<textarea id="{$id}" name="{name}">
+				<textarea id="{$id}" name="{name}" placeholder="{placeholder}">
 					<xsl:call-template name="attributes" />
 					<xsl:if test="@disabled">
 						<xsl:attribute name="disabled">1</xsl:attribute>
@@ -106,7 +106,7 @@
 				</textarea>
 			</xsl:when>
 			<xsl:otherwise>
-				<input id="{$id}" type="{@type}" name="{name}" value="{value}">
+				<input id="{$id}" type="{@type}" name="{name}" value="{value}" placeholder="{placeholder}">
 					<xsl:call-template name="attributes" />
 					<xsl:if test="@disabled">
 						<xsl:attribute name="disabled">1</xsl:attribute>
