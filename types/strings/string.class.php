@@ -24,7 +24,15 @@ class String extends ArrayObject {
 	}
 
 	public function underscore($string = NULL) {
-		return new String(strtolower(preg_replace('/([^A-Z])([A-Z])/', "$1_$2", (string) self::__instance($string))));
+		$string = (string) self::__instance($string);
+
+		$string = preg_replace("/[^[:alnum:]]+/", "_", $string);
+
+		$string = preg_replace('/([^A-Z])([A-Z])/', "$1_$2", $string);
+
+		$string = preg_replace("/_+/", "_", $string);
+
+		return new String(strtolower($string));
 	}
 
 	public function __invoke($string = NULL) {
