@@ -75,7 +75,7 @@
 	<!-- Input -->
 	
 	<xsl:template match="input">
-		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}" placeholder="{placeholder}">
+		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}">
 			<xsl:call-template name="attributes" />
 			<xsl:if test="@disabled">
 				<xsl:attribute name="disabled">1</xsl:attribute>
