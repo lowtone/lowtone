@@ -256,10 +256,14 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	 */
 	public function transform($template = NULL) {
 		if (!$template) {
+
 			// Force static load call
+			
 			$template = new DOMDocument(); 
 			
-			$template->load($this->itsTemplate);
+			if (false === $template->load($this->itsTemplate))
+				throw new exceptions\TransformException("Failed to load template");
+
 		}
 
 		return self::transformDocument($this, $template);
@@ -522,15 +526,15 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	 */
 	public static function transformDocument(DOMDocument $document, $template) {
 		if (!($template instanceof DOMDocument))
-			return false;
+			throw new exceptions\TransformException("Provided template is not an instance of DOMDocument");
 			
 		$xsltp = new XSLTProcessor();
 		
 		if (!$xsltp->importStylesheet($template))
-			return false;
+			throw new exceptions\TransformException("Failed to import template");
 		
 		if(!($document = $xsltp->transformToDoc($document)))
-			return false;
+			throw new exceptions\TransformException("Failed transforming document");
 			
 		return $document;
 	}
