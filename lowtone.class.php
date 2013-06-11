@@ -114,33 +114,7 @@ abstract class Lowtone {
 
 		// Scripts
 
-		if (is_array($scripts = include LIB_DIR . "/lowtone/assets/scripts/scripts.array.php")) {
-		
-			foreach (array("wp_enqueue_scripts", "admin_enqueue_scripts") as $action) {
-
-				add_action($action, function() use ($scripts) {
-
-					foreach ($scripts as $handle => $script) {
-
-						call_user_func_array(
-								(isset($script["enqueue"]) && $script["enqueue"] ? "wp_enqueue_script" : "wp_register_script"),
-								array(
-										$handle,
-										@$script["raw_src"] ?: @$script["src"] . (@$script["min"] && !Util::isScriptDebug() ? "-min" : "") . ".js",
-										@$script["deps"]
-									)
-							);
-
-						if (@$script["localize"]) 
-							wp_localize_script($handle, @$script["localize"]["name"], @$script["localize"]["locales"]);
-						
-					}
-					
-				});
-
-			}
-
-		}
+		self::includeScripts("/lowtone/assets/scripts");
 
 		// Extend CRON schedules
 		
@@ -169,6 +143,44 @@ abstract class Lowtone {
 
 		});
 		
+		return true;
+	}
+
+	private function includeScripts($path) {
+		$path = trim($path, "\\\\/");
+
+		if (!is_array($scripts = include LIB_DIR . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR . "scripts.array.php")) 
+			return false;
+
+		$url = trim(LIB_URL, "/");
+
+		foreach (array("wp_enqueue_scripts", "admin_enqueue_scripts") as $action) {
+
+			add_action($action, function() use ($path, $scripts, $url) {
+
+				foreach ($scripts as $handle => $script) {
+					$prop = function($prop) use ($script) {
+						return isset($script[$prop]) ? $script[$prop] : NULL;
+					};
+
+					call_user_func_array(
+							(isset($script["enqueue"]) && $script["enqueue"] ? "wp_enqueue_script" : "wp_register_script"),
+							array(
+									$handle,
+									$prop("raw_src") ?: $url . "/" . $path . "/" . $prop("src") . ($prop("min") && !Util::isScriptDebug() ? ".min" : "") . ".js",
+									$prop("deps")
+								)
+						);
+
+					if ($localize = (array) $prop("localize")) 
+						wp_localize_script($handle, $localize["name"], $localize["locales"]);
+					
+				}
+				
+			});
+
+		}
+
 		return true;
 	}
 	
