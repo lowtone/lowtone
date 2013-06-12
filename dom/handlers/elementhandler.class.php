@@ -90,9 +90,15 @@ class ElementHandler {
 					$value->build();
 				
 			}
+
+			if ($value instanceof DOMDocument)
+				$value = $this->itsDocument->importDocument($value);
+
+			if (!($value instanceof DOMNode))
+				$value = $this->createElement($name, $value);
 			
-			if ($element = $value instanceof DOMDocument ? $this->itsDocument->importDocument($value) : $this->createElement($name, $value))
-				$elements[] = $element;
+			if ($value)
+				$elements[] = $value;
 			
 		}
 		

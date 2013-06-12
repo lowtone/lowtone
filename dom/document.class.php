@@ -26,6 +26,10 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	 */
 	protected $itsElementHandler;
 
+	/**
+	 * A callback applied to the name of new elements.
+	 * @var callback
+	 */
 	protected $itsElementNameFilter;
 	
 	/**
@@ -103,7 +107,7 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 
 			$e
 				->setElementName($name)
-				->setELementValue($value);
+				->setElementValue($value);
 
 			throw $e;
 		}

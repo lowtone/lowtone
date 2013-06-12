@@ -111,7 +111,7 @@ class Element extends DOMElement implements interfaces\ElementHandler {
 	// Static
 	
 	public static function validateName($name) {
-		return !preg_match("/^([[:punct:][:digit:]]|xml)|[[:space:]]/i", $name);
+		return $name && !preg_match("/^([[:punct:][:digit:]]|xml)|[[:space:]]/i", $name);
 	}
 
 	public static function normalizeName($name, $template = "elm_%s") {
