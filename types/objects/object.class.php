@@ -173,12 +173,6 @@ class Object extends XArray implements Documentable {
 		return "lowtone\\types\\objects\\collections\\Collection";
 	}
 
-	public static function createListDocument(array $objects) {
-		$class = static::__getListDocumentClass();
-
-		return new $class($objects);
-	}
-
 	public static function __createCollection($objects = NULL) {
 		$class = static::__getCollectionClass();
 
