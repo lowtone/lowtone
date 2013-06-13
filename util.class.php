@@ -102,7 +102,7 @@ abstract class Util {
 	 * FALSE if not.
 	 */
 	public static function doingCron() {
-		return (defined(DOING_CRON) && DOING_CRON);
+		return (defined("DOING_CRON") && DOING_CRON);
 	}
 
 	// Debug
@@ -113,14 +113,6 @@ abstract class Util {
 
 	public static function isScriptDebug() {
 		return self::isDebug() || (defined("SCRIPT_DEBUG") && SCRIPT_DEBUG);
-	}
-	
-	// Query
-	
-	public static function getContext() {
-		$query = new wp\queries\Query();
-		
-		return $query->getContext();
 	}
 	
 	// Other
@@ -140,7 +132,7 @@ abstract class Util {
 		
 		ob_end_clean();
 		
-		if (@$result === false)
+		if (false === $result)
 			return false;
 		
 		return $output;
@@ -167,7 +159,7 @@ abstract class Util {
 				$callback = func_get_arg(1);
 				$params = array_slice(func_get_args(), 2);
 			} else 
-				list(, $callback, $params) = @func_get_args();
+				list(, $callback, $params) = func_get_args();
 				
 		} else
 			$params = array_slice(func_get_args(), 1);
