@@ -16,6 +16,6 @@ interface Documentable {
 	 * @return Document Returns a Document object to represent the Documentable
 	 * object instance.
 	 */
-	public function createDocument();
+	public function __toDocument();
 
 }

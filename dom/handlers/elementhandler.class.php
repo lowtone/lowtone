@@ -84,7 +84,7 @@ class ElementHandler {
 	public function createElements(array $values) {
 		for ($elements = array(); list($name, $value) = each($values);) {
 			if ($value instanceof Documentable) {
-				$value = $value->createDocument();
+				$value = $value->__toDocument();
 
 				if ($value instanceof Buildable) 
 					$value->build();

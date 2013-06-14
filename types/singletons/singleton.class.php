@@ -9,7 +9,7 @@ use ReflectionClass;
  * @version 1.0
  * @package wordpress\libs\lowtone\types\singletons
  */
-abstract class Singleton {
+abstract class Singleton implements interfaces\Singleton {
 	
 	protected static $__instances;
 
@@ -26,7 +26,7 @@ abstract class Singleton {
 	public static function __instance() {
 		$class = get_called_class();
 
-		if (!(self::$__instances[$class] instanceof $class)) {
+		if (!(isset(self::$__instances[$class]) && self::$__instances[$class] instanceof $class)) {
 			$instance = new $class();
 
 			call_user_func(array($instance, "__construct"), func_get_args());
