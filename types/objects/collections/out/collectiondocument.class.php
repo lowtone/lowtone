@@ -36,6 +36,12 @@ class CollectionDocument extends Document {
 			));
 	}
 
+	public function updateBuildOptions(array $options) {
+		return $this->itsBuildOptions
+			->updateOptions($options)
+			->transferOptions(self::OBJECT_DOCUMENT_OPTIONS, self::BUILD_LOCALES);
+	}
+
 	public function build(array $options = NULL) {
 		$this->updateBuildOptions((array) $options);
 		

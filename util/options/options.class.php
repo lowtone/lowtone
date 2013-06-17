@@ -23,6 +23,24 @@ class Options extends Map {
 	public function updateOptions(array $options) {
 		return $this->setOptions((array) ($this->itsRecursive ? $this->mergeRecursive($options) : $this->merge($options)));
 	}
+
+	/**
+	 * Copy one or more option values to another child option.
+	 * @param string $target The identifier for the target option.
+	 * @param array $options The options to tranfer to the target.
+	 * @return Options Returns the Options instance for method chaining.
+	 */
+	public function transferOptions($target, $options) {
+		if (!is_array($options))
+			$options = array_slice(func_get_args(), 1);
+
+		$this[$target] = array_merge(
+				array_intersect_key((array) $this, array_flip($options)), 
+				isset($this[$target]) ? (array) $this[$target] : array()
+			);
+
+		return $this;
+	}
 	
 	// Getters
 	
