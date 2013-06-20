@@ -59,7 +59,9 @@
 		<fieldset id="{@uniqid}">
 			<xsl:call-template name="attributes" />
 			<xsl:call-template name="class" />
-			<xsl:apply-templates select="legend" />
+			<xsl:if test="boolean(string(legend))">
+				<xsl:apply-templates select="legend" />
+			</xsl:if>
 			<xsl:apply-templates select="fieldset|input|html" />
 		</fieldset>
 	</xsl:template>
