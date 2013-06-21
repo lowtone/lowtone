@@ -485,9 +485,9 @@ abstract class Record extends Object {
 
 		}
 
-		if (isset($options[self::OPTION_OFFSET]) || isset($options[self::OPTION_LIMIT])) {
-			$offset = isset($options[self::OPTION_OFFSET]) ? $options[self::OPTION_OFFSET] : 0;
-			$limit = isset($options[self::OPTION_LIMIT]) ? $options[self::OPTION_LIMIT] : 18446744073709551615;
+		if (($hasOffset = isset($options[self::OPTION_OFFSET])) || ($hasLimit = isset($options[self::OPTION_LIMIT]))) {
+			$offset = $hasOffset ? $options[self::OPTION_OFFSET] : 0;
+			$limit = $hasLimit ? $options[self::OPTION_LIMIT] : 18446744073709551615;
 
 			$query[] = "LIMIT " . (int) $offset . "," . (int) $limit;
 		}

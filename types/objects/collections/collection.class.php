@@ -103,7 +103,8 @@ class Collection extends XArray implements Documentable {
 	public function all(array $options = NULL) {
 		$objects = $this->getObjects();
 
-		if ($conditions = @$options[self::OPTION_CONDITIONS]) {
+		if ($options[self::OPTION_CONDITIONS]) {
+			$conditions = $options[self::OPTION_CONDITIONS];
 
 			$objects = array_filter($objects, function($object) use ($conditions) {
 				return $object->match($conditions);
@@ -111,7 +112,8 @@ class Collection extends XArray implements Documentable {
 
 		}
 
-		if ($not = @$options[self::OPTION_NOT]) {
+		if (isset($options[self::OPTION_NOT])) {
+			$not = $options[self::OPTION_NOT];
 
 			$objects = array_filter($objects, function($object) use ($not) {
 				return !$object->match($not);
@@ -119,9 +121,13 @@ class Collection extends XArray implements Documentable {
 
 		}
 
-		if (($offset = @$options[self::OPTION_OFFSET]) || ($limit = @$options[self::OPTION_LIMIT])) 
-			$objects = array_slice($objects, $offset, @$limit);
-		
+		if (($hasOffset = isset($options[self::OPTION_OFFSET])) || ($hasLimit = isset($options[self::OPTION_LIMIT]))) {
+			$offset = $hasOffset ? $options[self::OPTION_OFFSET] : 0;
+			$limit = $hasLimit ? $options[self::OPTION_LIMIT] : NULL;
+
+			$objects = array_slice($objects, $offset, $limit);
+		}
+
 		return static::create($objects, $this);
 	}
 
@@ -132,7 +138,7 @@ class Collection extends XArray implements Documentable {
 	 * @param array|NULL $options An optional list of requirements and options.
 	 * @return array Returns an array of Record instances.
 	 */
-	public function find(array $conditions = NULL, array $options = NULL) {
+	public function find($conditions = NULL, array $options = NULL) {
 		return $this->all(array_merge((array) $options, array(self::OPTION_CONDITIONS => (array) $conditions)));
 	}
 
@@ -142,8 +148,8 @@ class Collection extends XArray implements Documentable {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public function findOne(array $options = NULL) {
-		return reset($this->all($options));
+	public function findOne($conditions = NULL, array $options = NULL) {
+		return reset($this->find($conditions, $options));
 	}
 
 	/**
@@ -152,8 +158,8 @@ class Collection extends XArray implements Documentable {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public function first(array $options = NULL) {
-		return Collection::create(reset($this->getObjects()), $this);
+	public function first($conditions = NULL, array $options = NULL) {
+		return $this->findOne($conditions, $options);
 	}
 
 	/**
@@ -162,12 +168,12 @@ class Collection extends XArray implements Documentable {
 	 * @return Record|bool Returns an Record object on success or 
 	 * FALSE if no entry matching the given requirements was found.
 	 */
-	public function last(array $options = NULL) {
-		return Collection::create(end($this->getObjects()), $this);
+	public function last($conditions = NULL, array $options = NULL) {
+		return end($this->find($conditions, $options));
 	}
 
-	public function not(array $conditions) {
-		return $this->all(array(self::OPTION_NOT => $conditions));
+	public function not(array $conditions, array $options = NULL) {
+		return $this->all(array_merge((array) $options, array(self::OPTION_NOT => $conditions)));
 	}
 
 	public function slice($start, $length = NULL) {
