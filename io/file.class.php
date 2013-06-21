@@ -24,7 +24,7 @@ class File {
 		if (!($path instanceof URL)) {
 			$path = (string) $path;
 
-			if (false === strpos("://", $path))
+			if (false === strpos($path, "://"))
 				$path = "file:///" . $path;
 
 			$url = URL::fromString($path);
@@ -78,6 +78,15 @@ class File {
 			return $this->itsContents;
 
 		$this->itsContents = $contents;
+
+		return $this;
+	}
+
+	public function url($url = NULL) {
+		if (!isset($url))
+			return $this->itsUrl;
+
+		$this->itsUrl = $url;
 
 		return $this;
 	}
