@@ -29,8 +29,6 @@ abstract class Singleton implements interfaces\Singleton {
 		if (!(isset(self::$__instances[$class]) && self::$__instances[$class] instanceof $class)) {
 			$instance = new $class();
 
-			call_user_func(array($instance, "__construct"), func_get_args());
-
 			self::$__instances[$class] = $instance;
 		}
 
