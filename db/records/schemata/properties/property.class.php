@@ -29,6 +29,7 @@ class Property extends Object {
 		TYPE_STRING = "string",
 		TYPE_DATETIME = "datetime",
 		TYPE_DATE = "date",
+		TYPE_ENUM = "enum",
 		TYPE_TIME = "time";
 
 	const INDEX_PRIMARY_KEY = "primary_key";
