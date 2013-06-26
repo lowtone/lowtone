@@ -34,6 +34,10 @@ class URL extends Record {
 		return $this;
 	}
 
+	public function pathinfo($options = NULL) {
+		return pathinfo($this->{self::PROPERTY_PATH}, $options);
+	}
+
 	public function __toString() {
 		return (!is_null($this[self::PROPERTY_SCHEME]) ? $this[self::PROPERTY_SCHEME] . "://" : "") .
 			(!is_null($this[self::PROPERTY_USER]) ? $this[self::PROPERTY_USER] . (!is_null($this[self::PROPERTY_PASS]) ? ":" . $this[self::PROPERTY_PASS] : "") . "@" : "") .
