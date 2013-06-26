@@ -20,34 +20,7 @@ class File {
 	protected $itsContents;
 
 	public function __construct($path) {
-
-		if (!($path instanceof URL)) {
-			$path = (string) $path;
-
-			if (false === strpos($path, "://"))
-				$path = "file:///" . $path;
-
-			$url = URL::fromString($path);
-		}
-		
-		if ("file" === $url->scheme && preg_match("#^[\.\\\\/]#", $url->path)) {
-			$caller = function() {
-				foreach (debug_backtrace() as $trace) {
-					if (__FILE__ == $trace["file"])
-						continue;
-
-					return $trace["file"];
-				}
-
-				return NULL;
-			};
-
-			if (NULL !== ($c = $caller()))
-				$url->path = dirname($c) . DIRECTORY_SEPARATOR . $url->path;
-
-		}
-
-		$this->itsUrl = $url;
+		$this->url($path);
 	}
 
 	public function get($path = NULL) {
@@ -73,6 +46,15 @@ class File {
 		return $file;
 	}
 
+	public function url($url = NULL) {
+		if (!isset($url))
+			return $this->itsUrl;
+
+		$this->itsUrl = $this->__createUrl($url);
+
+		return $this;
+	}
+
 	public function contents($contents = NULL) {
 		if (!isset($contents))
 			return $this->itsContents;
@@ -81,14 +63,42 @@ class File {
 
 		return $this;
 	}
+	
+	/**
+	 * Get a path relative to the given base.
+	 *
+	 * @todo Works only when a file can be located using realpath().
+	 * 
+	 * @param string $path The subject path. Defaults to the file path if called
+	 * on a File instance.
+	 * @param string $base The base path.
+	 * @return string Returns a path relative to the given base.
+	 */
+	public function relPath($path = NULL, $base = NULL) {
+		if (!isset($path)) {
 
-	public function url($url = NULL) {
-		if (!isset($url))
-			return $this->itsUrl;
+			if (isset($this) && $this instanceof File)
+				$path = $this->itsUrl;
+			else
+				throw new \ErrorException(sprintf("%s requires a path", __FUNCTION__));
 
-		$this->itsUrl = $url;
+		}
 
-		return $this;
+		if ($path instanceof URL && "file" == $path->scheme)
+			$path = (string) $path->path;
+
+		if (!isset($base))
+			$base = ABSPATH;
+
+		$base = explode(DIRECTORY_SEPARATOR, rtrim(realpath((string) $base), DIRECTORY_SEPARATOR));
+		$path = explode(DIRECTORY_SEPARATOR, rtrim(realpath((string) $path), DIRECTORY_SEPARATOR));
+		
+		while (count($base) && count($path) && ($base[0] == $path[0])) {
+			array_shift($base);
+			array_shift($path);
+		}
+		
+		return str_pad("", count($base) * 3, '..'. DIRECTORY_SEPARATOR) . implode(DIRECTORY_SEPARATOR, $path);
 	}
 
 	/**
@@ -101,15 +111,51 @@ class File {
 	 * @return File Returns an instance of the File class on success.
 	 */
 	public function __instance($path = NULL, $contents = NULL) {
-		if (isset($this) && $this instanceof File)
-			return $this;
+		if (isset($this) && $this instanceof File) {
+			if (func_num_args() < 1)
+				return $this;
 
-		$file = new File($path);
+			$file = clone $this;
+		} else
+			$file = new File($path);
+
+		if (isset($path))
+			$file->url($path);
 
 		if (isset($contents))
 			$file->contents($contents);
 
 		return $file;
+	}
+
+	public function __createUrl($url) {
+		if (!($url instanceof URL)) {
+			$url = (string) $url;
+
+			if (false === strpos($url, "://"))
+				$url = "file:///" . $url;
+
+			$url = URL::fromString($url);
+		}
+		
+		if ("file" === $url->scheme && preg_match("#^[\.\\\\/]#", $url->path)) {
+			$caller = function() {
+				foreach (debug_backtrace() as $trace) {
+					if (__FILE__ == $trace["file"])
+						continue;
+
+					return $trace["file"];
+				}
+
+				return NULL;
+			};
+
+			if (NULL !== ($c = $caller()))
+				$url->path = dirname($c) . DIRECTORY_SEPARATOR . $url->path;
+
+		}
+
+		return $url;
 	}
 
 }
