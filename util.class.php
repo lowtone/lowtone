@@ -91,30 +91,6 @@ abstract class Util {
 		return self::extractFileData(self::getClassFile($class), $property);
 	}
 	
-	// Cron
-	
-	/**
-	 * Test whether the script is executed as a cron task. Execution as a cron 
-	 * task doesn't ensure that the script was initiated by an internel 
-	 * scheduled server call, just that the script was executed in the context 
-	 * of wp-cron.php.
-	 * @return bool Returns TRUE if the script is executed as a cron task or 
-	 * FALSE if not.
-	 */
-	public static function doingCron() {
-		return (defined("DOING_CRON") && DOING_CRON);
-	}
-
-	// Debug
-	
-	public static function isDebug() {
-		return (defined("WP_DEBUG") && WP_DEBUG);
-	}
-
-	public static function isScriptDebug() {
-		return self::isDebug() || (defined("SCRIPT_DEBUG") && SCRIPT_DEBUG);
-	}
-	
 	// Other
 	
 	/**
@@ -171,19 +147,6 @@ abstract class Util {
 	}
 	
 	/**
-	 * Check if the script execution was initialized by a call to wp-login.php.
-	 * @return boolean Returns TRUE if wp-login.php was called or FALSE if not.
-	 */
-	public static function isLogin() {
-		return (strtolower(basename($_SERVER["PHP_SELF"])) == "wp-login.php");
-	}
-
-	public static function isAutosave() {
-		return (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE);
-
-	}
-	
-	/**
 	 * Get the client IP address.
 	 * @return string Returns a string representation for the client't IP 
 	 * address.
@@ -220,26 +183,6 @@ abstract class Util {
 	 */
 	public static function getTimeLeft() {
 		return (ini_get("max_execution_time") - self::getExecutionTime());
-	}
-	
-	/**
-	 * Get a path relative to the WordPress root directory.
-	 * @param string $dir The subject path.
-	 * @return string Returns a relative path for the given directory path.
-	 */
-	public static function getRelPath($dir, $from = NULL) {
-		if (!is_string($from))
-			$from = ABSPATH;
-
-		$from = explode(DIRECTORY_SEPARATOR, rtrim(realpath($from), DIRECTORY_SEPARATOR));
-		$to = explode(DIRECTORY_SEPARATOR, rtrim(realpath($dir), DIRECTORY_SEPARATOR));
-		
-		while(count($from) && count($to) && ($from[0] == $to[0])) {
-			array_shift($from);
-			array_shift($to);
-		}
-		
-		return str_pad("", count($from) * 3, '..'. DIRECTORY_SEPARATOR) . implode(DIRECTORY_SEPARATOR, $to);
 	}
 
 	public static function pathToUrl($path) {
@@ -296,6 +239,63 @@ abstract class Util {
 	 */
 	public static function addMergedPath($path) {
 		return Loader::addMergedPath($path);
+	}
+	
+	// Cron
+	
+	/**
+	 * Test whether the script is executed as a cron task. Execution as a cron 
+	 * task doesn't ensure that the script was initiated by an internel 
+	 * scheduled server call, just that the script was executed in the context 
+	 * of wp-cron.php.
+	 * @return bool Returns TRUE if the script is executed as a cron task or 
+	 * FALSE if not.
+	 */
+	public static function doingCron() {
+		return (defined("DOING_CRON") && DOING_CRON);
+	}
+
+	// Debug
+	
+	public static function isDebug() {
+		return (defined("WP_DEBUG") && WP_DEBUG);
+	}
+
+	public static function isScriptDebug() {
+		return self::isDebug() || (defined("SCRIPT_DEBUG") && SCRIPT_DEBUG);
+	}
+	
+	/**
+	 * Check if the script execution was initialized by a call to wp-login.php.
+	 * @return boolean Returns TRUE if wp-login.php was called or FALSE if not.
+	 */
+	public static function isLogin() {
+		return (strtolower(basename($_SERVER["PHP_SELF"])) == "wp-login.php");
+	}
+
+	public static function isAutosave() {
+		return (defined("DOING_AUTOSAVE") && DOING_AUTOSAVE);
+
+	}
+	
+	/**
+	 * Get a path relative to the WordPress root directory.
+	 * @param string $dir The subject path.
+	 * @return string Returns a relative path for the given directory path.
+	 */
+	public static function getRelPath($dir, $from = NULL) {
+		if (!is_string($from))
+			$from = ABSPATH;
+
+		$from = explode(DIRECTORY_SEPARATOR, rtrim(realpath($from), DIRECTORY_SEPARATOR));
+		$to = explode(DIRECTORY_SEPARATOR, rtrim(realpath($dir), DIRECTORY_SEPARATOR));
+		
+		while(count($from) && count($to) && ($from[0] == $to[0])) {
+			array_shift($from);
+			array_shift($to);
+		}
+		
+		return str_pad("", count($from) * 3, '..'. DIRECTORY_SEPARATOR) . implode(DIRECTORY_SEPARATOR, $to);
 	}
 	
 }
