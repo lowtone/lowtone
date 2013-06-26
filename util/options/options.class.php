@@ -41,6 +41,29 @@ class Options extends Map {
 
 		return $this;
 	}
+
+	public function defaults($defaults, $options = NULL) {
+		if (isset($this) && $this instanceof Options) {
+			$target = $this;
+
+			if (isset($options))
+				$target->updateOptions($options);
+
+		} else
+			$target = new Options($options);
+			
+		foreach ($defaults as $key => $default) {
+			if (isset($target[$key]))
+				continue;
+
+			if (is_callable($default))
+				$default = call_user_func($default);
+
+			$target[$key] = $default;
+		}
+
+		return $target;
+	}
 	
 	// Getters
 	
