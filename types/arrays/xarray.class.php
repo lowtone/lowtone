@@ -33,12 +33,14 @@ class XArray extends ArrayObject {
 	 * @param int $maxDepth The maximum numbers of levels to walk through.
 	 * @param array|NULL $array The subject array. If the function was called 
 	 * on an object this defaults to the object's array. 
+	 * @param bool $onArray Whether to trigger the callback on arrays before 
+	 * walking through them.
 	 * @param array|NULL $path The current path.
 	 * @return array|bool Returns the resulting array on success or FALSE on 
 	 * failure.
 	 */
-	public function walk($callback, $maxDepth = -1, array $array = NULL, array $path = NULL) {
-		if (!is_array($array) && NULL === ($array = self::__instance(self::INSTANCE_THIS)))
+	public function walk($callback, $maxDepth = -1, $array = NULL, $onArray = false, $path = NULL) {
+		if (!isset($array) && NULL === ($array = self::__instance(self::INSTANCE_THIS)))
 			return false;
 
 		$array = (array) $array;
@@ -54,11 +56,12 @@ class XArray extends ArrayObject {
 		foreach ($array as $key => &$val) {
 			$curPath = $extendPath($key);
 			$curDepth = count($curPath);
+
+			if (!is_array($val) || $onArray)
+				$val = call_user_func($callback, $val, $curPath);
 			
-			if (is_array($val) && ($maxDepth < 1 || $curDepth < $maxDepth))
-				$val = self::walk($callback, $maxDepth, $val, $curPath);
-			else
-				$val = call_user_func($callback, $val, $curPath);	
+			if (is_array($val) && ($maxDepth < 1 || $curDepth < $maxDepth)) 
+				$val = self::walk($callback, $maxDepth, $val, $onArray, $curPath);
 			
 		}
 		
