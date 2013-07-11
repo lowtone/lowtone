@@ -162,5 +162,9 @@ return apply_filters("lowtone_scripts", array(
 		"jquery-lowtone-ui-tables" => array(
 				"src" => "jquery/lowtone/ui/jquery.tables", 
 				"deps" => array("jquery", "jquery-ui-tablesorter")
+			),
+		"raphael" => array(
+				"src" => "raphael/raphael",
+				"min" => true
 			)
 	));
