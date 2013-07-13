@@ -166,7 +166,9 @@ class Document extends DOMDocument implements interfaces\ElementHandler, Buildab
 	 * @return Document Returns the document object for chaining.
 	 */
 	public function appendCreateElement($name, $value = NULL) {
-		return $this->itsElementHandler->appendCreateElement($name, $value);
+		$this->itsElementHandler->appendCreateElement($name, $value);
+
+		return $this;
 	}
 	
 	/**

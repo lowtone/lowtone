@@ -11,12 +11,14 @@ use DOMElement,
  * @package wordpress\libs\lowtone\dom
  */
 class Element extends DOMElement implements interfaces\ElementHandler {
+
+	protected $itsElementHandler;
 	
 	/*public function appendChild(DOMNode $child, $parent = false) {
 		if ($parent)
 			return parent::appendChild($child);
 			
-		return handlers\ElementHandler::create($this)->appendChild($child);
+		return $this->elementHandler()->appendChild($child);
 	}*/
 	
 	/**
@@ -26,7 +28,9 @@ class Element extends DOMElement implements interfaces\ElementHandler {
 	 * @return Element Returns the element object for chaining.
 	 */
 	public function appendCreateElement($name, $value = NULL) {
-		return handlers\ElementHandler::create($this)->appendCreateElement($name, $value);
+		$this->elementHandler()->appendCreateElement($name, $value);
+
+		return $this;
 	}
 	
 	/**
@@ -36,7 +40,7 @@ class Element extends DOMElement implements interfaces\ElementHandler {
 	 * @return Element Returns the newly appended element.
 	 */
 	public function createAppendElement($name, $value = NULL) {
-		return handlers\ElementHandler::create($this)->createAppendElement($name, $value);
+		return $this->elementHandler()->createAppendElement($name, $value);
 	}
 	
 	/**
@@ -45,15 +49,15 @@ class Element extends DOMElement implements interfaces\ElementHandler {
 	 * @param Element Returns the parent element.
 	 */
 	public function appendChildren(array $children) {
-		return handlers\ElementHandler::create($this)->appendChildren($children);
+		return $this->elementHandler()->appendChildren($children);
 	}
 	
 	public function appendCreateElements(array $values) {
-		return handlers\ElementHandler::create($this)->appendCreateElements($values);
+		return $this->elementHandler()->appendCreateElements($values);
 	}
 	
 	public function createAppendElements(array $values) {
-		return handlers\ElementHandler::create($this)->createAppendElements($values);
+		return $this->elementHandler()->createAppendElements($values);
 	}
 	
 	/**
@@ -106,6 +110,13 @@ class Element extends DOMElement implements interfaces\ElementHandler {
 			$this->setAttribute(strtolower($name), $value);
 		
 		return $this;
+	}
+
+	protected function elementHandler() {
+		if (!($this->itsElementHandler instanceof handlers\ElementHandler))
+			$this->itsElementHandler = handlers\ElementHandler::create($this);
+
+		return $this->itsElementHandler;
 	}
 
 	// Static
