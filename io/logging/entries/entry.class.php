@@ -1,7 +1,7 @@
 <?php
 namespace lowtone\io\logging\entries;
 use lowtone\db\records\Record,
-	lowtone\db\records\schemata\properties\Property;
+	lowtone\db\records\schemata\properties\types\DateTime;
 
 class Entry extends Record {
 
@@ -31,9 +31,22 @@ class Entry extends Record {
 	
 	public static function __createSchema($defaults = NULL) {
 		return parent::__createSchema(array(
-				self::PROPERTY_TIMESTAMP => array(
-						Property::ATTRIBUTE_DEFAULT_VALUE => ""
-					)
+				self::PROPERTY_TIMESTAMP => new DateTime(array(
+					DateTime::ATTRIBUTE_DEFAULT_VALUE => ""
+				))
+			));
+	}
+
+	public static function fromString($string) {
+		$entry = new Entry();
+
+		if (!preg_match("/\[([^\]]+)\] \(([^\)]+)\) (.+)/", $string, $matches))
+			return $entry;
+
+		return $entry(array(
+				self::PROPERTY_TIMESTAMP => $matches[1],
+				self::PROPERTY_DOMAIN => $matches[2],
+				self::PROPERTY_MESSAGE => $matches[3],
 			));
 	}
 }
