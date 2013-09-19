@@ -138,7 +138,7 @@ class File {
 			$url = URL::fromString($url);
 		}
 		
-		if ("file" === $url->scheme && preg_match("#^[\.\\\\/]#", $url->path)) {
+		if ("file" === $url->scheme && "." == $url->path[0]) {
 			$caller = function() {
 				foreach (debug_backtrace() as $trace) {
 					if (__FILE__ == $trace["file"])
