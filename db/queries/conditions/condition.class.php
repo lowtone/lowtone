@@ -162,7 +162,7 @@ class Condition implements ArrayAccess {
 
 	// Static
 	
-	public static function create($condition, $options = NULL) {
+	public static function create($condition = NULL, $options = NULL) {
 		return new static($condition, $options);
 	}
 
