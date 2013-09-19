@@ -29,6 +29,9 @@ class URL extends Record {
 		PROPERTY_FRAGMENT = "fragment";
 
 	public function appendQuery($query) {
+		if (is_string($query))
+			parse_str($query, $query);
+
 		$this->query = array_merge((array) $this->query, (array) $query);
 		
 		return $this;
@@ -69,9 +72,9 @@ class URL extends Record {
 					if (is_array($val))
 						return $val;
 
-					parse_str($val, $query);
+					parse_str($val, $val);
 
-					return $query;
+					return $val;
 				}
 			)
 		));
