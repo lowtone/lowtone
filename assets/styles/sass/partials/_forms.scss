@@ -94,7 +94,10 @@ label.lowtone {
 			width: 80%;
 
 			& + .lowtone.comment {
-				margin-left: 15%;
+				margin: {
+					top: -1em;
+					left: 15%;
+				}
 				width: 80%;
 			}
 		}
