@@ -8,30 +8,6 @@ return apply_filters("lowtone_scripts", array(
 				"src" => "strings/sprintf",
 				"min" => true
 			),
-		"audio" => array(
-				"src" => "audiojs/audio.min"
-			),
-		"angular" => array(
-				"src" => "angular/angular",
-				"min" => true
-			),
-		"underscore" => array(
-				"src" => "underscore/underscore",
-				"min" => true
-			),
-		"backbone" => array(
-				"src" => "backbone/backbone",
-				"min" => true, 
-				"deps" => array("underscore")
-			),
-		"modernizr" => array(
-				"src" => "modernizr/modernizr",
-				"min" => true
-			),
-		"d3" => array(
-				"src" => "d3/d3.v3",
-				"min" => true
-			),
 		"google-jsapi" => array(
 				"raw_src" => "https://www.google.com/jsapi"
 			),
@@ -163,8 +139,4 @@ return apply_filters("lowtone_scripts", array(
 				"src" => "jquery/lowtone/ui/jquery.tables", 
 				"deps" => array("jquery", "jquery-ui-tablesorter")
 			),
-		"raphael" => array(
-				"src" => "raphael/raphael",
-				"min" => true
-			)
 	));
