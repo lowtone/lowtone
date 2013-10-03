@@ -243,7 +243,7 @@ class XArray extends ArrayObject {
 				if (is_numeric($key))
 					array_push($values, $value);
 				else
-					$values[$key] = XArray::isArray(@$values[$key]) && XArray::isArray($value) ? (array) XArray::create($values[$key])->mergeRecursive($value) : $value;
+					$values[$key] = isset($values[$key]) && XArray::isArray($values[$key]) && XArray::isArray($value) ? (array) XArray::create($values[$key])->mergeRecursive($value) : $value;
 					
 			}
 			
