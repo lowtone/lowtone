@@ -42,26 +42,6 @@ table.slidetoggle {
 		}
 	}
 }
-
-label.lowtone {
-	float: left; 
-	width: 15%; 
-	line-height: 15px; 
-	padding: 4px 0;
-
-	&:after {
-		content: ":";
-	}
-}
-
-
-.inner-sidebar,
-	#side-sortables,
-	#widgets-right {
-		label.lowtone {
-			width: 30%;
-		}
-	}
 	
 input.lowtone.text, 
 	textarea.lowtone,
@@ -87,6 +67,15 @@ textarea.lowtone {
 }
 
 label.lowtone {
+	float: left; 
+	width: 15%; 
+	line-height: 15px; 
+	padding: 4px 0;
+
+	&:after {
+		content: ":";
+	}
+
 	& + input.lowtone.text,
 		& + textarea.lowtone,
 		& + select.lowtone {
@@ -103,8 +92,10 @@ label.lowtone {
 
 .inner-sidebar,
 	#side-sortables,
-	#widgets-right {
+	.widgets-sortables {
 		label.lowtone {
+			width: 30%;
+
 			& + input.lowtone.text,
 				& + textarea.lowtone,
 				& + select.lowtone {
