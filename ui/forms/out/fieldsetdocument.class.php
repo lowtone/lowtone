@@ -5,7 +5,7 @@ use lowtone\ui\forms\base\out\FormElementDocument,
 
 /**
  * @author Paul van der Meijs <code@paulvandermeijs.nl>
- * @copyright Copyright (c) 2011-2012, Paul van der Meijs
+ * @copyright Copyright (c) 2011-2013, Paul van der Meijs
  * @license http://wordpress.lowtone.nl/license/
  * @version 1.0
  * @package wordpress\libs\lowtone\ui\forms\out
@@ -16,9 +16,13 @@ class FieldSetDocument extends FormElementDocument {
 		parent::__construct($fieldSet);
 
 		$this->updateBuildOptions(array(
+				self::BUILD_ATTRIBUTES => array(
+					FieldSet::PROPERTY_UNIQUE_ID,
+					FieldSet::PROPERTY_ELEMENT_NAME
+				),
 				self::BUILD_ELEMENTS => array(
-						FieldSet::PROPERTY_LEGEND
-					)
+					FieldSet::PROPERTY_LEGEND
+				)
 			));
 		
 	}

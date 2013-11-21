@@ -109,6 +109,9 @@ class Form extends base\FormElement {
 			if (!($element instanceof Input))
 				return;
 
+			if (is_null($element->{Input::PROPERTY_NAME}))
+				return;
+
 			$element->{Input::PROPERTY_NAME}(array_merge($prefix, (array) $element->{Input::PROPERTY_NAME}));
 		});
 	}

@@ -42,6 +42,30 @@ table.slidetoggle {
 		}
 	}
 }
+<<<<<<< HEAD
+=======
+
+label.lowtone {
+	float: left; 
+	width: 15%; 
+	line-height: 15px; 
+	overflow: hidden;
+	padding: 4px 0;
+
+	&:after {
+		content: ":";
+	}
+}
+
+
+.inner-sidebar,
+	#side-sortables,
+	#widgets-right {
+		label.lowtone {
+			width: 30%;
+		}
+	}
+>>>>>>> 0efaccf7c5b22d71daca61c41b8e5ebd1b8ef822
 	
 input.lowtone.text, 
 	textarea.lowtone,
@@ -49,6 +73,7 @@ input.lowtone.text,
 		display: block; 
 		margin-bottom: 1em; 
 		width: 95%; 
+
 		@include box_sizing(border-box);
 
 		&.setting {
@@ -83,12 +108,14 @@ label.lowtone {
 			width: 80%;
 
 			& + .lowtone.comment {
-				margin-left: 15%;
+				margin: {
+					top: -1em;
+					left: 15%;
+				}
 				width: 80%;
 			}
 		}
 }
-
 
 .inner-sidebar,
 	#side-sortables,
@@ -103,6 +130,7 @@ label.lowtone {
 					width: 65%;
 
 					& + .lowtone.comment {
+						clear: both;
 						margin-left: 0;
 						width: 100%;
 					}

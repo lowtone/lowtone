@@ -10,7 +10,16 @@ namespace lowtone\ui\forms;
  */
 class FieldSet extends base\FormElement {
 
-	const PROPERTY_LEGEND = "legend";
+	const PROPERTY_LEGEND = "legend",
+		PROPERTY_ELEMENT_NAME = "element_name";
+
+	public function __construct(Form $form = NULL, $properties = NULL, array $options = NULL) {
+		$properties = array_merge(array(
+				self::PROPERTY_ELEMENT_NAME => "fieldset",
+			), (array) $properties);
+
+		parent::__construct($form, $properties, $options);
+	}
 
 	// Static
 	
