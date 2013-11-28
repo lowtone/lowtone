@@ -98,8 +98,8 @@ class URL extends Record {
 	public static function fromCurrent() {
 		return new static(array(
 				self::PROPERTY_SCHEME => preg_match("/https/i", $_SERVER["SERVER_PROTOCOL"]) ? "https" : "http",
-				self::PROPERTY_HOST => @$_SERVER["HTTP_HOST"],
-				self::PROPERTY_PATH => $_SERVER["PHP_SELF"],
+				self::PROPERTY_HOST => $_SERVER["HTTP_HOST"],
+				self::PROPERTY_PATH => $_SERVER["REQUEST_URI"],
 				self::PROPERTY_QUERY => $_SERVER["QUERY_STRING"]
 			));
 	}
@@ -109,6 +109,13 @@ class URL extends Record {
 			$id = $GLOBALS["wp_query"]->queried_object_id;
 
 		return isset(self::$__permalink[$id]) ? self::$__permalink[$id] : (false !== ($permalink = (0 == $id ? site_url("/") : get_permalink($id))) ? (self::$__permalink[$id] = URL::fromString($permalink)) : false);
+	}
+
+	public static function __cast($url) {
+		if ($url instanceof static)
+			return $url;
+
+		return static::fromString((string) $url);
 	}
 
 	// Deprecated
