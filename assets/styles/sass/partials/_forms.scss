@@ -42,30 +42,6 @@ table.slidetoggle {
 		}
 	}
 }
-<<<<<<< HEAD
-=======
-
-label.lowtone {
-	float: left; 
-	width: 15%; 
-	line-height: 15px; 
-	overflow: hidden;
-	padding: 4px 0;
-
-	&:after {
-		content: ":";
-	}
-}
-
-
-.inner-sidebar,
-	#side-sortables,
-	#widgets-right {
-		label.lowtone {
-			width: 30%;
-		}
-	}
->>>>>>> 0efaccf7c5b22d71daca61c41b8e5ebd1b8ef822
 	
 input.lowtone.text, 
 	textarea.lowtone,
@@ -95,6 +71,7 @@ label.lowtone {
 	float: left; 
 	width: 15%; 
 	line-height: 15px; 
+	overflow: hidden;
 	padding: 4px 0;
 
 	&:after {
