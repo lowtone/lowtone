@@ -80,9 +80,8 @@
 	<xsl:template match="input">
 		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}">
 			<xsl:call-template name="attributes" />
-			<xsl:if test="@disabled">
-				<xsl:attribute name="disabled">1</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="disabled" />
+			<xsl:call-template name="required" />
 			<xsl:call-template name="class" />
 		</input>
 	</xsl:template>
@@ -101,9 +100,8 @@
 			<xsl:when test="@multiple">
 				<textarea id="{$id}" name="{name}" placeholder="{placeholder}">
 					<xsl:call-template name="attributes" />
-					<xsl:if test="@disabled">
-						<xsl:attribute name="disabled">1</xsl:attribute>
-					</xsl:if>
+					<xsl:call-template name="disabled" />
+					<xsl:call-template name="required" />
 					<xsl:call-template name="class" />
 					<xsl:value-of select="value" />
 				</textarea>
@@ -111,9 +109,8 @@
 			<xsl:otherwise>
 				<input id="{$id}" type="{@type}" name="{name}" value="{value}" placeholder="{placeholder}">
 					<xsl:call-template name="attributes" />
-					<xsl:if test="@disabled">
-						<xsl:attribute name="disabled">1</xsl:attribute>
-					</xsl:if>
+					<xsl:call-template name="disabled" />
+					<xsl:call-template name="required" />
 					<xsl:call-template name="class" />
 				</input>
 			</xsl:otherwise>
@@ -131,7 +128,8 @@
 		<xsl:apply-templates select="label">
 			<xsl:with-param name="id" select="$id" />
 		</xsl:apply-templates>
-		<select id="{$id}">
+
+		<select id="{$id}" placeholder="{placeholder}">
 			<xsl:call-template name="attributes" />
 			<xsl:attribute name="name">
 				<xsl:value-of select="name" />
@@ -143,13 +141,14 @@
 				<xsl:attribute name="multiple">multiple</xsl:attribute>
 			</xsl:if>
 			<xsl:call-template name="class" />
-			<xsl:if test="@disabled">
-				<xsl:attribute name="disabled">1</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="disabled" />
+			<xsl:call-template name="required" />
 			<xsl:apply-templates select="option" />
 			<xsl:apply-templates select="optgroup" />
 		</select>
+
 		<xsl:apply-templates select="comment" />
+		
 		<div class="clear" />
 	</xsl:template>
 	
@@ -172,9 +171,8 @@
 			<xsl:if test="@selected">
 				<xsl:attribute name="selected">selected</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="@disabled">
-				<xsl:attribute name="disabled">1</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="disabled" />
+			<xsl:call-template name="required" />
 			<xsl:value-of select="label" disable-output-escaping="yes" />
 		</xsl:element>
 	</xsl:template>
@@ -190,9 +188,8 @@
 			<xsl:if test="@selected">
 				<xsl:attribute name="checked">checked</xsl:attribute>
 			</xsl:if>
-			<xsl:if test="@disabled">
-				<xsl:attribute name="disabled">1</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="disabled" />
+			<xsl:call-template name="required" />
 		</input>
 		<xsl:apply-templates select="label">
 			<xsl:with-param name="id" select="$id" />
@@ -210,9 +207,8 @@
 		
 		<input id="{$id}" type="{@type}" name="{name}" value="{value}">
 			<xsl:call-template name="attributes" />
-			<xsl:if test="@disabled">
-				<xsl:attribute name="disabled">1</xsl:attribute>
-			</xsl:if>
+			<xsl:call-template name="disabled" />
+			<xsl:call-template name="required" />
 			<xsl:call-template name="class" />
 		</input>
 	</xsl:template>
@@ -224,7 +220,15 @@
 		<xsl:param name="id" />
 		
 		<xsl:if test="string(.)">
-			<label for="{$id}" class="lowtone"><xsl:value-of select="." disable-output-escaping="yes" /></label>
+			<label for="{$id}">
+				<xsl:attribute name="class">
+					<xsl:text>lowtone</xsl:text>
+					<xsl:if test="../@required">
+						<xsl:text> required</xsl:text>
+					</xsl:if>
+				</xsl:attribute>
+				<xsl:value-of select="." disable-output-escaping="yes" />
+			</label>
 		</xsl:if>
 	</xsl:template>
 	
@@ -260,6 +264,24 @@
 				<xsl:value-of select="." />
 			</xsl:for-each>
 		</xsl:attribute>
+	</xsl:template>
+
+
+	<!-- Required -->
+
+	<xsl:template name="required">
+		<xsl:if test="@required">
+			<xsl:attribute name="required">required</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+
+
+	<!-- Disabled -->
+
+	<xsl:template name="disabled">
+		<xsl:if test="@disabled">
+			<xsl:attribute name="disabled">disabled</xsl:attribute>
+		</xsl:if>
 	</xsl:template>
 
 
