@@ -55,6 +55,19 @@ abstract class Lowtone {
 		
 		Globals::set("log", $log)->lock("log", true);
 
+		// Load text domain
+		
+		$loadTextDomain = function() {
+			if (is_textdomain_loaded("lowtone"))
+				return;
+
+			load_textdomain("lowtone", __DIR__ . "/assets/languages/" . get_locale() . ".mo");
+		};
+
+		add_action("plugins_loaded", $loadTextDomain);
+
+		add_action("after_setup_theme", $loadTextDomain);
+
 		// Request
 		
 		Globals::set("request", new net\Request())->lock("request", true);
