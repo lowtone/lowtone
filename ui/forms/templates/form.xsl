@@ -78,12 +78,19 @@
 	<!-- Input -->
 	
 	<xsl:template match="input">
+		<xsl:variable name="id" select="@uniqid" />
+		
+		<xsl:apply-templates select="label">
+			<xsl:with-param name="id" select="$id" />
+		</xsl:apply-templates>
+		
 		<input id="{@uniqid}" type="{@type}" name="{name}" value="{value}">
 			<xsl:call-template name="attributes" />
 			<xsl:call-template name="disabled" />
 			<xsl:call-template name="required" />
 			<xsl:call-template name="class" />
 		</input>
+		<div class="clear" />
 	</xsl:template>
 	
 	
