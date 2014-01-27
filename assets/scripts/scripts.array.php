@@ -8,12 +8,6 @@ return apply_filters("lowtone_scripts", array(
 				"src" => "strings/sprintf",
 				"min" => true
 			),
-		"google-jsapi" => array(
-				"raw_src" => "https://www.google.com/jsapi"
-			),
-		"google-maps" => array(
-				"raw_src" => "http://maps.google.com/maps/api/js?sensor=true"
-			),
 		"jquery-ui-form" => array(
 				"src" => "jquery/ui/form/jquery.form",
 				"min" => true, 

@@ -42,13 +42,29 @@ class URL extends Record {
 	}
 
 	public function __toString() {
-		return (!is_null($this[self::PROPERTY_SCHEME]) ? $this[self::PROPERTY_SCHEME] . "://" : "") .
-			(!is_null($this[self::PROPERTY_USER]) ? $this[self::PROPERTY_USER] . (!is_null($this[self::PROPERTY_PASS]) ? ":" . $this[self::PROPERTY_PASS] : "") . "@" : "") .
-			(!is_null($this[self::PROPERTY_HOST]) ? $this[self::PROPERTY_HOST] : "") .
-			(!is_null($this[self::PROPERTY_PORT]) ? ":" . $this[self::PROPERTY_PORT] : "") .
-			(!is_null($this[self::PROPERTY_PATH]) ? $this[self::PROPERTY_PATH] : "") .
-			(!empty($this[self::PROPERTY_QUERY]) ? "?" . http_build_query($this[self::PROPERTY_QUERY]) : "") .
-			(!is_null($this[self::PROPERTY_FRAGMENT]) ? "#" . $this[self::PROPERTY_FRAGMENT] : "");
+		return (!is_null($this[self::PROPERTY_SCHEME]) 
+				? $this[self::PROPERTY_SCHEME] . "://" 
+				: "") .
+			(!is_null($this[self::PROPERTY_USER]) 
+				? $this[self::PROPERTY_USER] . (!is_null($this[self::PROPERTY_PASS]) 
+					? ":" . $this[self::PROPERTY_PASS] 
+					: "") . "@" 
+				: "") .
+			(!is_null($this[self::PROPERTY_HOST]) 
+				? $this[self::PROPERTY_HOST] 
+				: "") .
+			(!is_null($this[self::PROPERTY_PORT]) 
+				? ":" . $this[self::PROPERTY_PORT] 
+				: "") .
+			(!is_null($this[self::PROPERTY_PATH]) 
+				? $this[self::PROPERTY_PATH] 
+				: "") .
+			(!empty($this[self::PROPERTY_QUERY]) 
+				? "?" . http_build_query($this[self::PROPERTY_QUERY]) 
+				: "") .
+			(!is_null($this[self::PROPERTY_FRAGMENT]) && ($fragment = trim($this[self::PROPERTY_FRAGMENT])) 
+				? "#" . $fragment 
+				: "");
 	}
 
 	public function go($exit = true) {

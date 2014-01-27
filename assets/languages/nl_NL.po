@@ -1,0 +1,101 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Lowtone\n"
+"POT-Creation-Date: 2013-12-02 16:03+0100\n"
+"PO-Revision-Date: 2013-12-02 16:05+0100\n"
+"Last-Translator: Paul van der Meijs <info@lowtone.nl>\n"
+"Language-Team: Lowtone <info@lowtone.nl>\n"
+"Language: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ../..\n"
+
+#: ../../lowtone.class.php:137
+msgid "Once every 15 minutes"
+msgstr "Één keer elke 15 minuten"
+
+#: ../../lowtone.class.php:142
+msgid "Once every 30 minutes"
+msgstr "Één keer elke 30 minuten"
+
+#: ../../assets/scripts/scripts.array.php:35
+msgid "Back"
+msgstr "Terug"
+
+#: ../../ui/calendar/calendar.class.php:155
+msgid "Previous month"
+msgstr "Vorige maand"
+
+#: ../../ui/calendar/calendar.class.php:160
+msgid "Next month"
+msgstr "Volgende maand"
+
+#: ../../ui/calendar/calendar.class.php:171
+msgid "Mon"
+msgstr "Maa"
+
+#: ../../ui/calendar/calendar.class.php:172
+msgid "Tue"
+msgstr "Din"
+
+#: ../../ui/calendar/calendar.class.php:173
+msgid "Wed"
+msgstr "Woe"
+
+#: ../../ui/calendar/calendar.class.php:174
+msgid "Thu"
+msgstr "Don"
+
+#: ../../ui/calendar/calendar.class.php:175
+msgid "Fri"
+msgstr "Vrij"
+
+#: ../../ui/calendar/calendar.class.php:176
+msgid "Sat"
+msgstr "Zat"
+
+#: ../../ui/calendar/calendar.class.php:177
+msgid "Sun"
+msgstr "Zon"
+
+#: ../../ui/forms/input.class.php:67
+#, php-format
+msgid "Field %s can not be empty"
+msgstr "Het veld %s mag niet leeggelaten worden"
+
+#: ../../ui/forms/input.class.php:67
+msgid "Missing required value"
+msgstr "Ontbrekend veld"
+
+#: ../../ui/forms/special/datetimezone.class.php:28
+msgid "Timezone"
+msgstr "Tijdzone"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:68
+msgid "First"
+msgstr "Eerste"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:86
+msgid "Previous"
+msgstr "Vorige"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:115
+msgid "Next"
+msgstr "Volgende"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:133
+msgid "Last"
+msgstr "Laatste"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:143
+msgid "Page"
+msgstr "Pagina"
+
+#: ../../ui/pagination/out/paginationdocument.class.php:144
+msgid "of"
+msgstr "van"

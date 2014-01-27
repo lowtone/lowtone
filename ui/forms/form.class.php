@@ -186,6 +186,25 @@ class Form extends base\FormElement {
 			->nonceField($optionGroup . "-options");
 	}
 
+	// Validation
+	
+	public function validate() {
+		$errors = array();
+
+		$this->walkChildren(function($child) use (&$errors) {
+			if (!($child instanceof Input))
+				return;
+
+			try {
+				$child->validate();
+			} catch (validation\exceptions\ValidationException $e) {
+				$errors[] = $e;
+			}
+		});
+
+		return $errors ?: true;
+	}
+
 	// Getters
 	
 	/**
@@ -194,6 +213,36 @@ class Form extends base\FormElement {
 	 */
 	public function getOptionGroup() {
 		return $this->itsOptionGroup;
+	}
+
+	public function getValues() {
+		$values = new Map();
+
+		$this->walkChildren(function($element) use ($values) {
+			if (!($element instanceof Input))
+				return;
+
+			$value = $element->{Input::PROPERTY_VALUE};
+
+			switch ($element->{Input::PROPERTY_TYPE}) {
+				case Input::TYPE_CHECKBOX:
+				case Input::TYPE_RADIO:
+					$value = $element->{Input::PROPERTY_SELECTED} 
+						? $element->{Input::PROPERTY_VALUE}
+						: NULL;
+
+					break;
+
+				case Input::TYPE_SELECT:
+					$value = $element->{Input::PROPERTY_SELECTED};
+					break;
+
+			}
+
+			$values->path($element->{Input::PROPERTY_NAME}, $value);
+		});
+
+		return $values;
 	}
 
 	// Setters

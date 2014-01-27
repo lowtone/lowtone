@@ -53,7 +53,8 @@ class InputDocument extends FormElementDocument {
 				self::BUILD_ATTRIBUTES => array(
 						Input::PROPERTY_TYPE,
 						Input::PROPERTY_UNIQUE_ID,
-						Input::PROPERTY_DISABLED
+						Input::PROPERTY_DISABLED,
+						Input::PROPERTY_REQUIRED,
 					),
 				self::BUILD_CHILDREN => false
 			));
