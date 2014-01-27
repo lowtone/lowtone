@@ -99,7 +99,7 @@ class URL extends Record {
 		return new static(array(
 				self::PROPERTY_SCHEME => preg_match("/https/i", $_SERVER["SERVER_PROTOCOL"]) ? "https" : "http",
 				self::PROPERTY_HOST => $_SERVER["HTTP_HOST"],
-				self::PROPERTY_PATH => $_SERVER["REQUEST_URI"],
+				self::PROPERTY_PATH => ($queryStart = strpos($_SERVER["REQUEST_URI"], "?")) ? substr($_SERVER["REQUEST_URI"], 0, $queryStart) : $_SERVER["REQUEST_URI"],
 				self::PROPERTY_QUERY => $_SERVER["QUERY_STRING"]
 			));
 	}
