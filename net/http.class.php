@@ -30,12 +30,15 @@ class Http {
 				CURLOPT_CUSTOMREQUEST => strtoupper($method),
 				CURLOPT_URL => $url,
 				CURLOPT_POSTFIELDS => (array) $data,
-				CURLOPT_FOLLOWLOCATION => true
+				CURLOPT_FOLLOWLOCATION => true,
 			) + 
 			(array) $options + 
 			array(
 				CURLOPT_RETURNTRANSFER => true
 			);
+
+		if (ini_get("open_basedir"))
+			unset($options[CURLOPT_FOLLOWLOCATION]);
 
 		$request->setopt_array($options);
 
