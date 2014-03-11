@@ -90,7 +90,9 @@
 			<xsl:call-template name="required" />
 			<xsl:call-template name="class" />
 		</input>
-		<div class="clear" />
+		<xsl:if test="'hidden' != @type">
+			<div class="clear" />
+		</xsl:if>
 	</xsl:template>
 	
 	
