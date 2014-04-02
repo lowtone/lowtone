@@ -89,7 +89,7 @@ abstract class Record extends Object {
 			throw new exceptions\ReadOnlyException("Cannot save read-only object");
 
 		if ($defaults) 
-			$this(isset($options[self::OPTION_OVERWRITE_WITH_DEFAULTS]) && $options[self::OPTION_OVERWRITE_WITH_DEFAULTS] ? $defaults : array_diff_key((array) $defaults, (array) $object));
+			$this(isset($options[self::OPTION_OVERWRITE_WITH_DEFAULTS]) && $options[self::OPTION_OVERWRITE_WITH_DEFAULTS] ? $defaults : array_diff_key((array) $defaults, (array) $this));
 
 		global $wpdb;
 
